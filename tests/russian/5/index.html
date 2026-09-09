@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по русскому языку — 5 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "russian_5",
+  subject: "Русский язык",
+  grade: "5 класс",
+  title: "Входной тест по русскому языку",
+  description: "Диагностика знаний за начальную школу для тех, кто перешёл в 5-й: орфограммы, части речи, члены предложения, лексика.",
+  duration_min: 30,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Орфограммы", meta: "6 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Вставьте пропущенную букву: маш...на", unit: "буква", answer: ["и"] },
+        { id: "q2", num: 2, text: "Вставьте пропущенную букву: ч...шка", unit: "буква", answer: ["а"] },
+        { id: "q3", num: 3, text: "Вставьте пропущенную букву: щ...ка (рыба)", unit: "буква", answer: ["у"] },
+        { id: "q4", num: 4, text: "Вставьте безударную гласную (проверочное слово «воды»): в...да", unit: "буква", answer: ["о"] },
+        { id: "q5", num: 5, text: "Вставьте парную согласную (проверочное слово «дубы»): ду...", unit: "буква", answer: ["б"] },
+        { id: "q6", num: 6, text: "Вставьте разделительный знак: с...ел", unit: "ъ или ь", answer: ["ъ"] },
+      ]
+    },
+    {
+      title: "Часть 2. Части речи и состав слова", meta: "6 баллов",
+      questions: [
+        { id: "q7", num: 7, text: "Определите часть речи слова «бежит»", unit: "часть речи", answer: ["глагол"] },
+        { id: "q8", num: 8, text: "Определите часть речи слова «красивый»", unit: "часть речи", answer: ["прилагательное", "имя прилагательное"] },
+        { id: "q9", num: 9, text: "Выделите корень в слове «подводный»", unit: "корень", answer: ["вод"] },
+      ]
+    },
+    {
+      title: "Часть 3. Члены предложения", meta: "6 баллов",
+      questions: [
+        { id: "q10", num: 10, text: "Найдите подлежащее: «Яркое солнце осветило поляну.»", unit: "слово", answer: ["солнце"] },
+        { id: "q11", num: 11, text: "Найдите сказуемое в том же предложении", unit: "слово", answer: ["осветило"] },
+        { id: "q12", num: 12, text: "Сколько запятых нужно поставить: «Мама купила яблоки груши и сливы»?", unit: "число", answer: 1 },
+      ]
+    },
+    {
+      title: "Часть 4. Лексика", meta: "4 балла",
+      questions: [
+        { id: "q13", num: 13, text: "Подберите синоним к слову «храбрый»", unit: "слово", answer: ["смелый", "отважный", "мужественный", "бесстрашный"] },
+        { id: "q14", num: 14, text: "Подберите антоним к слову «холодный»", unit: "слово", answer: ["горячий", "тёплый", "теплый"] },
+      ]
+    },
+    {
+      title: "Часть 5. Текст", meta: "8 баллов",
+      questions: [
+        { id: "q15", num: 15, text: "Сколько слов в предложении: «Кот тихо спал на тёплом окне.»?", unit: "число", answer: 6 },
+        { id: "q16", num: 16, text: "Замените фразеологизм одним словом: «бить баклуши»", unit: "слово", answer: ["бездельничать", "лениться", "лодырничать"] },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>
