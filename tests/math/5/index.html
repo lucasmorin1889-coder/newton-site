@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по математике — 5 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount">Отвечено: 0/16</b>
+      <span id="timerDisplay">30:00</span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "math_5",
+  subject: "Математика",
+  grade: "5 класс",
+  title: "Входной тест по математике",
+  description: "Диагностика знаний за курс начальной школы для тех, кто перешёл в 5-й: вычисления, уравнения, величины, доли, текстовые задачи.",
+  duration_min: 30,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Вычисления", meta: "6 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "4128 + 956 =", unit: "число", answer: 5084 },
+        { id: "q2", num: 2, text: "3005 − 1847 =", unit: "число", answer: 1158 },
+        { id: "q3", num: 3, text: "34 × 26 =", unit: "число", answer: 884 },
+        { id: "q4", num: 4, text: "768 : 24 =", unit: "число", answer: 32 },
+        { id: "q5", num: 5, text: "(15 + 9) × 4 − 20 =", unit: "число", answer: 76 },
+        { id: "q6", num: 6, text: "900 − 8 × 45 =", unit: "число", answer: 540 }
+      ]
+    },
+    {
+      title: "Часть 2. Уравнения", meta: "6 баллов",
+      questions: [
+        { id: "q7", num: 7, text: "Решите уравнение: x + 47 = 132", unit: "x = ?", answer: 85 },
+        { id: "q8", num: 8, text: "Решите уравнение: 96 − x = 39", unit: "x = ?", answer: 57 },
+        { id: "q9", num: 9, text: "Решите уравнение: x × 8 = 96", unit: "x = ?", answer: 12 }
+      ]
+    },
+    {
+      title: "Часть 3. Величины", meta: "6 баллов",
+      questions: [
+        { id: "q10", num: 10, text: "Сколько метров в 3 км 250 м?", unit: "м", answer: 3250 },
+        { id: "q11", num: 11, text: "Сколько минут в 2 часах 15 минутах?", unit: "мин", answer: 135 },
+        { id: "q12", num: 12, text: "Найдите периметр прямоугольника со сторонами 8 см и 5 см", unit: "см", answer: 26 }
+      ]
+    },
+    {
+      title: "Часть 4. Доли", meta: "4 балла",
+      questions: [
+        { id: "q13", num: 13, text: "Найдите 1/4 от 24", unit: "число", answer: 6 },
+        { id: "q14", num: 14, text: "Найдите 1/3 от 27", unit: "число", answer: 9 }
+      ]
+    },
+    {
+      title: "Часть 5. Текстовые задачи", meta: "8 баллов",
+      questions: [
+        { id: "q15", num: 15, text: "В магазине было 84 книги. За день продали половину, а на следующий день ещё 15 книг. Сколько книг осталось в магазине?", unit: "книг", answer: 27 },
+        { id: "q16", num: 16, text: "Ширина прямоугольного участка 6 м, а длина в 3 раза больше ширины. Найдите площадь участка.", unit: "м²", answer: 108 }
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>
