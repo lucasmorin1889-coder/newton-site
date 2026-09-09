@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Каталог тестов — Ньютон</title>
+<style>
+  :root {
+    --bg: #f4f5ea; --bg-card: #fdfdf7; --ink: #20221a; --ink-soft: #5c6152;
+    --ink-faint: #8a8f7c; --accent: #5f6a3d; --accent-soft: #e6e9d6;
+    --accent-line: #c3cc9e; --rule: #dcd9c4; --rule-strong: #bdb890;
+    --field-bg: #fbfbf1; --ok: #2c6e8a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14160f; --bg-card: #1b1e14; --ink: #e7e6da; --ink-soft: #9da393;
+      --ink-faint: #6d7264; --accent: #9cb57a; --accent-soft: #232a19;
+      --accent-line: #3a4429; --rule: #2a2d20; --rule-strong: #3c4030;
+      --field-bg: #15170f; --ok: #6fb8d4;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink); margin: 0;
+    font-family: -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+  h1, h2 { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; margin: 0; }
+
+  #app { max-width: 760px; margin: 0 auto; padding: 44px 20px 70px; }
+
+  .brand { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 12px; }
+  h1 { font-size: 1.9rem; margin-bottom: 8px; }
+  .lede { color: var(--ink-soft); max-width: 56ch; margin-bottom: 8px; }
+  .count { font-size: 0.85rem; color: var(--ink-faint); margin-bottom: 34px; font-variant-numeric: tabular-nums; }
+
+  .grid { display: grid; gap: 16px; }
+
+  .card {
+    background: var(--bg-card); border: 1px solid var(--rule); border-radius: 8px;
+    padding: 20px 22px;
+  }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .badge {
+    display: inline-block; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-line);
+    border-radius: 20px; padding: 3px 11px; font-weight: 600; white-space: nowrap;
+  }
+  .card h2 { font-size: 1.15rem; margin: 10px 0 6px; }
+  .card .desc { color: var(--ink-soft); font-size: 0.92rem; margin-bottom: 14px; max-width: 60ch; }
+  .meta-row { display: flex; gap: 16px; font-size: 0.8rem; color: var(--ink-faint); margin-bottom: 16px; flex-wrap: wrap; }
+  .meta-row b { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn-open {
+    display: inline-block; background: var(--accent); color: var(--bg-card); text-decoration: none;
+    font-weight: 600; padding: 10px 18px; border-radius: 6px; font-size: 0.88rem;
+  }
+  .btn-open:hover { filter: brightness(1.08); }
+  .btn-copy {
+    background: transparent; border: 1px solid var(--rule-strong); color: var(--ink);
+    border-radius: 6px; padding: 10px 16px; font-size: 0.88rem; font-weight: 600;
+    cursor: pointer; font-family: inherit;
+  }
+  .btn-copy.done { border-color: var(--ok); color: var(--ok); }
+  .link-shown { font-size: 0.78rem; color: var(--ink-faint); word-break: break-all; margin-left: auto; }
+
+  .empty-note {
+    border: 1px dashed var(--rule-strong); border-radius: 8px; padding: 18px 20px;
+    color: var(--ink-faint); font-size: 0.85rem; text-align: center; margin-top: 6px;
+  }
+
+  .folder-card {
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+    background: var(--bg-card); border: 1px solid var(--rule); border-radius: 8px;
+    padding: 22px 24px; cursor: pointer; text-align: left; width: 100%;
+    font-family: inherit; color: var(--ink);
+  }
+  .folder-card:hover { border-color: var(--accent-line); background: var(--accent-soft); }
+  .folder-mark {
+    width: 40px; height: 40px; flex: none; border-radius: 8px;
+    background: var(--accent-soft); border: 1px solid var(--accent-line);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; color: var(--accent); font-size: 1rem;
+  }
+  .folder-info { flex: 1; }
+  .folder-info .fname { font-size: 1.05rem; font-weight: 700; }
+  .folder-info .fcount { font-size: 0.82rem; color: var(--ink-faint); margin-top: 2px; }
+  .folder-arrow { color: var(--ink-faint); font-size: 1.2rem; }
+
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px; background: none; border: none;
+    color: var(--ink-soft); font-size: 0.85rem; cursor: pointer; padding: 0; margin-bottom: 22px;
+    font-family: inherit;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  [hidden] { display: none !important; }
+
+  @media (max-width: 480px) {
+    .link-shown { display: none; }
+    .card-top { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+  <h1 id="pageTitle">Каталог тестов</h1>
+  <p class="lede" id="pageLede">Выберите папку с предметом, затем нужный тест — и отправьте ссылку ученику в любой удобный мессенджер.</p>
+  <div class="count" id="countLabel"></div>
+
+  <button class="back-link" id="backLink" hidden>← Все папки</button>
+
+  <div class="grid" id="folderGrid"></div>
+  <div class="grid" id="testGrid" hidden></div>
+
+  <div class="empty-note" id="emptyNote">Другие предметы будут добавляться сюда отдельными папками по мере готовности.</div>
+</div>
+
+<script>
+  // Добавляйте новые тесты в массив tests нужного предмета.
+  // Чтобы добавить новый предмет — добавьте новый объект в SUBJECTS.
+  const SUBJECTS = [
+    {
+      id: "math",
+      name: "Математика",
+      tests: [
+        { grade: "5 класс", title: "Входной тест по математике", description: "Диагностика знаний за курс начальной школы для тех, кто перешёл в 5-й: вычисления, уравнения, величины, доли, текстовые задачи.", duration: "30 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/8ae02146-d85e-4a78-91ab-b98deb05a1e5" },
+        { grade: "6 класс", title: "Входной тест по математике", description: "Диагностика знаний за курс 5 класса для тех, кто перешёл в 6-й: дроби, десятичные дроби, проценты, уравнения, величины.", duration: "30 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/04f57f21-a159-44cc-abd8-98eba9b4ea30" },
+        { grade: "7 класс", title: "Входной тест по математике", description: "Диагностика знаний за курс 6 класса для тех, кто перешёл в 7-й: дроби, отрицательные числа, уравнения, окружность, отношения.", duration: "35 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/82056aba-c687-40d8-bb55-c701e74dce40" },
+        { grade: "8 класс", title: "Входной тест по математике", description: "Диагностика знаний за курс 7 класса для тех, кто перешёл в 8-й: тождественные преобразования, уравнения и системы, линейная функция, геометрия.", duration: "40 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/bff57336-4e9f-4f6b-8c39-1ddc9b8feb14" },
+        { grade: "9 класс", title: "Входной тест по математике", description: "Диагностика знаний за курс 7–8 класса для тех, кто перешёл в 9-й: алгебра, уравнения, функции, геометрия.", duration: "45 мин", questions: 15, maxScore: 30, url: "https://claude.ai/code/artifact/09691e80-3e64-4fa8-8140-6a0a9ba2ae02" },
+        { grade: "10 класс", title: "Входной тест по математике", description: "Диагностика знаний за курс 9 класса для тех, кто перешёл в 10-й: квадратные уравнения, прогрессии, функции, геометрия.", duration: "45 мин", questions: 15, maxScore: 30, url: "https://claude.ai/code/artifact/21bdbe54-5fe6-4cd1-9867-7829aa8bcdf1" },
+        { grade: "11 класс", title: "Входной тест по математике", description: "Диагностика знаний за курс 10 класса для тех, кто перешёл в 11-й: тригонометрия, степени, логарифмы, стереометрия.", duration: "45 мин", questions: 15, maxScore: 30, url: "https://claude.ai/code/artifact/6cb0d4aa-c0d4-4943-ab10-84ecdaf2c9de" }
+      ]
+    },
+    {
+      id: "russian",
+      name: "Русский язык",
+      tests: [
+        { grade: "5 класс", title: "Входной тест по русскому языку", description: "Диагностика знаний за начальную школу для тех, кто перешёл в 5-й: орфограммы, части речи, члены предложения, лексика.", duration: "30 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/9ef14d5c-f354-42ff-9501-dcce17951265" },
+        { grade: "6 класс", title: "Входной тест по русскому языку", description: "Диагностика знаний за начальную школу и 5 класс для тех, кто перешёл в 6-й: орфограммы, лексика, словообразование, синтаксис.", duration: "30 мин", questions: 17, maxScore: 30, url: "https://claude.ai/code/artifact/d6ce7570-9a12-490a-9cfe-946010bbe7f5" },
+        { grade: "7 класс", title: "Входной тест по русскому языку", description: "Диагностика знаний за начальную школу, 5 и 6 класс для тех, кто перешёл в 7-й: орфограммы, числительное, местоимение, причастие, деепричастие.", duration: "35 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/a9efea8f-e428-48c4-8713-cdc2d7065534" },
+        { grade: "8 класс", title: "Входной тест по русскому языку", description: "Диагностика знаний за начальную школу и с 5 по 7 класс для тех, кто перешёл в 8-й: словосочетание, типы сказуемого, односоставные и осложнённые предложения.", duration: "40 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/9a0454f2-6865-4072-b50a-da80b815d0b1" },
+        { grade: "9 класс", title: "Входной тест по русскому языку", description: "Диагностика знаний за начальную школу и с 5 по 8 класс для тех, кто перешёл в 9-й: сложные предложения, синтаксический разбор, стили речи.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/72bb799b-8e5d-4a37-af06-222feac971ba" },
+        { grade: "10 класс", title: "Входной тест по русскому языку", description: "Диагностика знаний за начальную школу и с 5 по 9 класс для тех, кто перешёл в 10-й: орфография, средства выразительности, сложное предложение, культура речи.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/4011d7e9-eb5f-455d-94bf-43d014af06e1" },
+        { grade: "11 класс", title: "Входной тест по русскому языку", description: "Диагностика знаний за начальную школу и с 5 по 10 класс для тех, кто перешёл в 11-й: орфоэпия, средства выразительности, культура речи.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/f6c56533-ce1c-453f-87e9-9c6c1110ef54" }
+      ]
+    },
+    {
+      id: "chemistry",
+      name: "Химия",
+      tests: [
+        { grade: "8 класс", title: "Входной тест по химии", description: "Проверка готовности к старту химии: величины, вещества и явления, смеси, безопасность в лаборатории.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/3e1fa29c-8a72-4234-bad8-4a63291fd7b5" },
+        { grade: "9 класс", title: "Входной тест по химии", description: "Диагностика знаний за курс 8 класса для тех, кто перешёл в 9-й: строение вещества, классы соединений, типы реакций, расчёты.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/bbee16a7-6cc0-4ef3-8bdb-8f0704aae305" },
+        { grade: "10 класс", title: "Входной тест по химии", description: "Диагностика знаний за курс 8–9 класса для тех, кто перешёл в 10-й: электролитическая диссоциация, ОВР, свойства металлов, расчёты.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/16c61768-12ec-4e35-9026-5e9492adcd66" },
+        { grade: "11 класс", title: "Входной тест по химии", description: "Диагностика знаний за курс 8–10 класса для тех, кто перешёл в 11-й: органическая химия, классы углеводородов, расчёты.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/9cec18f5-6ea5-43f8-909a-2a2902c9d7c3" }
+      ]
+    },
+    {
+      id: "cs",
+      name: "Информатика",
+      tests: [
+        { grade: "7 класс", title: "Входной тест по информатике", description: "Проверка готовности к старту информатики: компьютерная грамотность, логика, безопасность, файлы.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/4f70156b-cd3b-455d-8a9f-6df73dc41035" },
+        { grade: "8 класс", title: "Входной тест по информатике", description: "Диагностика знаний за курс 7 класса для тех, кто перешёл в 8-й: измерение информации, устройство компьютера, кодирование.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/8f8f46c3-f3b3-46bf-b394-638f2444a08d" },
+        { grade: "9 класс", title: "Входной тест по информатике", description: "Диагностика знаний за курс 8 класса для тех, кто перешёл в 9-й: системы счисления, логика, алгоритмы, программирование.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/aac30d37-96df-4258-858e-a271890ab4bc" },
+        { grade: "10 класс", title: "Входной тест по информатике", description: "Диагностика знаний за курс 9 класса для тех, кто перешёл в 10-й: таблицы, базы данных, сети, моделирование.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/3fdf07e5-6cfb-4e91-870e-8edc42fe7b7e" },
+        { grade: "11 класс", title: "Входной тест по информатике", description: "Диагностика знаний за курс 10 класса для тех, кто перешёл в 11-й: системы счисления, программирование, безопасность.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/cdeb0fb6-9c7d-433f-ac90-7a8a7d2f6ad1" }
+      ]
+    },
+    {
+      id: "society",
+      name: "Обществознание",
+      tests: [
+        { grade: "6 класс", title: "Входной тест по обществознанию", description: "Проверка общей социальной грамотности перед стартом курса обществознания: семья, потребности человека, государственные символы, права гражданина.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/c193a656-c3c8-428f-8068-9e2d0d08db61" },
+        { grade: "7 класс", title: "Входной тест по обществознанию", description: "Диагностика знаний за курс 6 класса для тех, кто перешёл в 7-й: человек как биосоциальное существо, деятельность, потребности, малые группы.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/4ada976c-e436-4f22-bc72-6d47c7dc2af8" },
+        { grade: "8 класс", title: "Входной тест по обществознанию", description: "Диагностика знаний за курс 7 класса для тех, кто перешёл в 8-й: социальные нормы, отклоняющееся поведение, человек и экономика, человек и природа.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/d7eddd7f-8e3d-42b7-aa5e-3ca64a1996b7" },
+        { grade: "9 класс", title: "Входной тест по обществознанию", description: "Диагностика знаний за курс 8 класса для тех, кто перешёл в 9-й: личность и социализация, духовная культура, социальная структура, основы экономики.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/093294ed-cb01-4585-b310-f7ddcbe2c2f5" },
+        { grade: "10 класс", title: "Входной тест по обществознанию", description: "Диагностика знаний за курс 9 класса для тех, кто перешёл в 10-й: политическая сфера, права и свободы человека, правонарушения, участие в политической жизни.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/ff7e8266-276f-4968-83f3-81a06527f9b8" },
+        { grade: "11 класс", title: "Входной тест по обществознанию", description: "Диагностика знаний за курс 10 класса для тех, кто перешёл в 11-й: экономика, социальные отношения, политика и право.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/e44f7aa5-0553-4dcb-aa26-9535637800f3" }
+      ]
+    },
+    {
+      id: "biology",
+      name: "Биология",
+      tests: [
+        { grade: "5 класс", title: "Входной тест по биологии", description: "Проверка готовности к старту биологии в 5 классе: признаки живого, части растения, группы животных, органы чувств.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/63ae119b-c1b6-4ea6-a3f1-83259b1d6917" },
+        { grade: "6 класс", title: "Входной тест по биологии", description: "Диагностика знаний за курс 5 класса для тех, кто перешёл в 6-й: методы изучения природы, царства живой природы, клетка, увеличительные приборы.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/b6e3be58-baf8-4a74-a051-30ff8796ab69" },
+        { grade: "7 класс", title: "Входной тест по биологии", description: "Диагностика знаний за курс 6 класса для тех, кто перешёл в 7-й: клетка и ткани растения, органы растения, фотосинтез, бактерии и грибы.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/c692b9a4-5c77-4be5-b620-f3f8735e6b72" },
+        { grade: "8 класс", title: "Входной тест по биологии", description: "Диагностика знаний за курс 7 класса для тех, кто перешёл в 8-й: систематика животных, значение животных, дыхание и питание разных групп.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/bb4a25de-1eb5-4715-bc5d-8a206ccc42bd" },
+        { grade: "9 класс", title: "Входной тест по биологии", description: "Диагностика знаний за курс 8 класса для тех, кто перешёл в 9-й: системы органов человека, гомеостаз, гигиена и здоровый образ жизни.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/605afae3-0ae4-4a3e-ab6b-fb3de06bde35" },
+        { grade: "10 класс", title: "Входной тест по биологии", description: "Диагностика знаний за курс 9 класса для тех, кто перешёл в 10-й: клетка углублённо, основы генетики, эволюционное учение, основы экологии.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/5868bb9c-6cb8-4a89-9ddd-a9653fdf39e5" },
+        { grade: "11 класс", title: "Входной тест по биологии", description: "Диагностика знаний за курс 10 класса для тех, кто перешёл в 11-й: молекулярная биология, клеточный цикл, генетика углублённо, онтогенез.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/0f479d3d-890b-46f0-8ba9-280e2ecd3194" }
+      ]
+    },
+    {
+      id: "history",
+      name: "История",
+      tests: [
+        { grade: "5 класс", title: "Входной тест по истории", description: "Проверка готовности к старту истории в 5 классе: время и счёт лет, ключевые исторические понятия, базовые сведения по истории России из начальной школы.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/6982adbd-bf93-4215-ae2e-6c5b5b2c913a" },
+        { grade: "6 класс", title: "Входной тест по истории", description: "Диагностика знаний за курс 5 класса (История Древнего мира) для тех, кто перешёл в 6-й: Древний Египет, Древняя Греция, Древний Рим, Древний Восток.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/4b2031dd-74fb-46a9-9e64-1e5ccead2786" },
+        { grade: "7 класс", title: "Входной тест по истории", description: "Диагностика знаний за курс 6 класса для тех, кто перешёл в 7-й: феодализм и рыцарство средневековой Европы, крестовые походы, образование Древнерусского государства, монгольское нашествие.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/50867dcb-89d9-4b87-aa55-44c397dbfb4a" },
+        { grade: "8 класс", title: "Входной тест по истории", description: "Диагностика знаний за курс 7 класса для тех, кто перешёл в 8-й: Великие географические открытия, Реформация в Европе, эпоха Ивана Грозного и опричнина, начало Смутного времени.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/9d6ea9f2-3b7a-44c8-acb4-da591d152adc" },
+        { grade: "9 класс", title: "Входной тест по истории", description: "Диагностика знаний за курс 8 класса для тех, кто перешёл в 9-й: реформы Петра I, эпоха Екатерины II, Великая французская революция, промышленный переворот, Отечественная война 1812 года.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/160f4329-ffee-4fda-8fd8-9fbba8b4fa20" },
+        { grade: "10 класс", title: "Входной тест по истории", description: "Диагностика знаний за курс 9 класса для тех, кто перешёл в 10-й: реформы Александра II и отмена крепостного права, революционное движение, Первая мировая война, революции 1917 года.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/48ba8c21-738a-4d23-9a23-50f61ed26e8f" },
+        { grade: "11 класс", title: "Входной тест по истории", description: "Диагностика знаний за курс 10 класса для тех, кто перешёл в 11-й: образование СССР, индустриализация и коллективизация, Великая Отечественная война, Холодная война, распад СССР.", duration: "45 мин", questions: 16, maxScore: 30, url: "https://claude.ai/code/artifact/0ce89b36-404e-4b34-a596-f8f8090dcc2d" }
+      ]
+    }
+  ];
+
+  const folderGrid = document.getElementById('folderGrid');
+  const testGrid = document.getElementById('testGrid');
+  const backLink = document.getElementById('backLink');
+  const countLabel = document.getElementById('countLabel');
+  const pageTitle = document.getElementById('pageTitle');
+  const pageLede = document.getElementById('pageLede');
+  const emptyNote = document.getElementById('emptyNote');
+
+  function totalTests() {
+    return SUBJECTS.reduce((s, subj) => s + subj.tests.length, 0);
+  }
+
+  function renderFolders() {
+    folderGrid.innerHTML = '';
+    SUBJECTS.forEach(subj => {
+      const card = document.createElement('button');
+      card.className = 'folder-card';
+      card.type = 'button';
+      card.innerHTML = `
+        <div class="folder-mark">${subj.name.slice(0, 2).toUpperCase()}</div>
+        <div class="folder-info">
+          <div class="fname">${subj.name}</div>
+          <div class="fcount">${subj.tests.length} ${subj.tests.length === 1 ? 'тест' : 'теста'}</div>
+        </div>
+        <div class="folder-arrow">→</div>
+      `;
+      card.addEventListener('click', () => openSubject(subj.id));
+      folderGrid.appendChild(card);
+    });
+
+    pageTitle.textContent = 'Каталог тестов';
+    pageLede.textContent = 'Выберите папку с предметом, затем нужный тест — и отправьте ссылку ученику в любой удобный мессенджер.';
+    countLabel.textContent = totalTests() + ' ' + (totalTests() === 1 ? 'тест' : 'тестов') + ' в ' + SUBJECTS.length + (SUBJECTS.length === 1 ? ' папке' : ' папках');
+    backLink.hidden = true;
+    folderGrid.hidden = false;
+    testGrid.hidden = true;
+    emptyNote.hidden = false;
+  }
+
+  function renderTests(subj) {
+    testGrid.innerHTML = '';
+    subj.tests.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <div class="card-top">
+          <span class="badge">${subj.name} · ${t.grade}</span>
+        </div>
+        <h2>${t.title}</h2>
+        <p class="desc">${t.description}</p>
+        <div class="meta-row">
+          <span><b>${t.duration}</b> на выполнение</span>
+          <span><b>${t.questions}</b> заданий</span>
+          <span><b>${t.maxScore}</b> баллов максимум</span>
+        </div>
+        <div class="actions">
+          <a class="btn-open" href="${t.url}" target="_blank" rel="noopener">Открыть тест</a>
+          <button class="btn-copy" data-url="${t.url}" type="button">Скопировать ссылку</button>
+          <span class="link-shown">${t.url}</span>
+        </div>
+      `;
+      testGrid.appendChild(card);
+    });
+
+    pageTitle.textContent = subj.name;
+    pageLede.textContent = 'Откройте нужный тест или скопируйте ссылку, чтобы отправить её ученику.';
+    countLabel.textContent = subj.tests.length + (subj.tests.length === 1 ? ' тест в папке' : ' теста(ов) в папке');
+    backLink.hidden = false;
+    folderGrid.hidden = true;
+    testGrid.hidden = false;
+    emptyNote.hidden = true;
+  }
+
+  function openSubject(id) {
+    const subj = SUBJECTS.find(s => s.id === id);
+    if (subj) renderTests(subj);
+  }
+
+  backLink.addEventListener('click', renderFolders);
+
+  testGrid.addEventListener('click', function (e) {
+    const btn = e.target.closest('.btn-copy');
+    if (!btn) return;
+    const url = btn.getAttribute('data-url');
+    const done = () => {
+      const original = 'Скопировать ссылку';
+      btn.textContent = 'Ссылка скопирована';
+      btn.classList.add('done');
+      setTimeout(() => { btn.textContent = original; btn.classList.remove('done'); }, 2000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done).catch(() => fallbackCopy(url, done));
+    } else {
+      fallbackCopy(url, done);
+    }
+  });
+
+  function fallbackCopy(text, done) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  renderFolders();
+</script>
+
+</body>
+</html>
