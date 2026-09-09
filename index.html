@@ -721,7 +721,7 @@ footer{background:var(--hbg);color:rgba(190,225,208,.5);padding:2.25rem 0;font-s
         <p>Оцениваем уровень знаний без оплаты. Результат — конкретная рекомендация по группе и формату занятий.</p>
       </div>
       <div class="off tcard rv">
-        <span class="urgency" style="background:var(--wa)">До конца августа</span>
+        <span class="urgency" style="background:var(--wa)" id="promo-month">До конца августа</span>
         <div class="off-badge">−30%</div>
         <h3>Пробное индивидуальное</h3>
         <p>Первое занятие один на один — со скидкой 30%. Попробуйте формат перед покупкой курса.</p>
@@ -955,6 +955,13 @@ footer{background:var(--hbg);color:rgba(190,225,208,.5);padding:2.25rem 0;font-s
 </div>
 
 <script>
+/* ===== DYNAMIC PROMO MONTH ===== */
+(()=>{
+  const months=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+  const el=document.getElementById('promo-month');
+  if(el) el.textContent='До конца '+months[new Date().getMonth()];
+})();
+
 /* ===== SCROLL PROGRESS + BACK TO TOP ===== */
 window.addEventListener('scroll',()=>{
   const p=window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100;
