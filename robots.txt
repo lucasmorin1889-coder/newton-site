@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /tests/review/
+Disallow: /tests/answers.html
+
+Sitemap: https://newton-petrozavodsk.ru/sitemap.xml
