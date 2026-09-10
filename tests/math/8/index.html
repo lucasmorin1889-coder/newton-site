@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по математике — 8 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "math_8",
+  subject: "Математика",
+  grade: "8 класс",
+  title: "Входной тест по математике",
+  description: "Диагностика знаний за курс 7 класса для тех, кто перешёл в 8-й: тождественные преобразования, уравнения и системы, линейная функция, геометрия.",
+  duration_min: 40,
+  max_score: 30,
+  total_questions: 17,
+  sections: [
+    {
+      title: "Часть 1. Тождественные преобразования", meta: "6 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Упростите: 3x² · 5x³", unit: "выражение", answer: "15x⁵" },
+        { id: "q2", num: 2, text: "Упростите: (2x)³", unit: "выражение", answer: "8x³" },
+        { id: "q3", num: 3, text: "Раскройте скобки: (x + 5)²", unit: "выражение", answer: "x²+10x+25" },
+        { id: "q4", num: 4, text: "Раскройте скобки: (x − 3)(x + 3)", unit: "выражение", answer: "x²-9" },
+        { id: "q5", num: 5, text: "Раскройте скобки: x(3x + 8)", unit: "выражение", answer: "3x²+8x" },
+        { id: "q6", num: 6, text: "Вычислите: 2⁵ : 2² =", unit: "число", answer: "8" },
+      ]
+    },
+    {
+      title: "Часть 2. Уравнения и системы", meta: "8 баллов",
+      questions: [
+        { id: "q7", num: 7, text: "Решите уравнение: 5x − 12 = 23", unit: "x = ?", answer: 7 },
+        { id: "q8", num: 8, text: "Решите уравнение: 3(x − 1) = 12", unit: "x = ?", answer: 5 },
+        { id: "q9x", num: 9.1, text: "Решите систему уравнений: { x + y = 10; x − y = 2 }. Чему равен x?", unit: "x = ?", answer: 6 },
+        { id: "q9y", num: 9.2, text: "Решите ту же систему уравнений: { x + y = 10; x − y = 2 }. Чему равен y?", unit: "y = ?", answer: 4 },
+      ]
+    },
+    {
+      title: "Часть 3. Линейная функция", meta: "4 балла",
+      questions: [
+        { id: "q10", num: 10, text: "Функция задана формулой y = 2x − 3. Найдите y при x = 2,5", unit: "y = ?", answer: 2 },
+        { id: "q11", num: 11, text: "Прямая проходит через точки A(0; 1) и B(3; 5). Найдите угловой коэффициент k этой прямой.", unit: "k = ?", answer: "4/3" },
+      ]
+    },
+    {
+      title: "Часть 4. Геометрия", meta: "12 баллов",
+      questions: [
+        { id: "q12", num: 12, text: "В прямоугольном треугольнике один из острых углов равен 45°. Найдите второй острый угол.", unit: "°", answer: 45 },
+        { id: "q13", num: 13, text: "В треугольнике один угол равен 70°, а два других равны между собой. Найдите каждый из этих равных углов.", unit: "°", answer: 55 },
+        { id: "q14", num: 14, text: "Сумма двух углов треугольника равна 100°. Найдите третий угол треугольника.", unit: "°", answer: 80 },
+        { id: "q15", num: 15, text: "Стороны треугольника равны 7 см, 9 см и 10 см. Найдите периметр треугольника.", unit: "см", answer: 26 },
+        { id: "q16", num: 16, text: "Найдите площадь треугольника с основанием 14 см и высотой 11 см.", unit: "см²", answer: 77 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

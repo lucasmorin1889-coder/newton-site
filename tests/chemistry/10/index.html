@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по химии — 10 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "chemistry_10",
+  subject: "Химия",
+  grade: "10 класс",
+  title: "Входной тест по химии",
+  description: "Диагностика знаний за курс 8–9 класса для тех, кто перешёл в 10-й: электролитическая диссоциация, ОВР, свойства металлов, расчёты.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Электролитическая диссоциация и расчёты", meta: "6 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Сколько моль ионов (катионов и анионов вместе) образуется при полной диссоциации 2 моль хлорида кальция CaCl2?", unit: "моль ионов", answer: 6 },
+        { id: "q2", num: 2, text: "Сульфат алюминия Al2(SO4)3 диссоциирует по схеме Al2(SO4)3 → 2Al3+ + 3SO4^2-. Сколько ионов (в сумме) образуется из одной формульной единицы этого вещества?", unit: "ионов", answer: 5 },
+        { id: "q3", num: 3, text: "Сульфат натрия диссоциирует по схеме Na2SO4 → 2Na+ + SO4^2-. Сколько моль катионов натрия образуется при диссоциации 1 моль Na2SO4?", unit: "моль", answer: 2 },
+        { id: "q4", num: 4, text: "Цинк реагирует с соляной кислотой: Zn + 2HCl → ZnCl2 + H2↑. Сколько моль водорода выделится при растворении 0,5 моль цинка в избытке кислоты?", unit: "моль", answer: 0.5 },
+        { id: "q5", num: 5, text: "Вычислите молярную массу сульфата магния MgSO4 (Ar(Mg)=24, Ar(S)=32, Ar(O)=16).", unit: "г/моль", answer: 120 },
+        { id: "q6", num: 6, text: "Какой объём (н.у.) займут 2 моль любого газа, если молярный объём газа при нормальных условиях равен 22,4 л/моль?", unit: "л", answer: 44.8 },
+      ]
+    },
+    {
+      title: "Часть 2. Ионы в растворах электролитов", meta: "3 задания · 2 балла каждое",
+      questions: [
+        { id: "q7", num: 7, text: "Как называются вещества, растворы или расплавы которых проводят электрический ток благодаря диссоциации на ионы?", unit: "термин", answer: ["электролиты"] },
+        { id: "q8", num: 8, text: "Диссоциация любой кислоты обязательно сопровождается образованием одних и тех же катионов, которые определяют кислые свойства раствора. Назовите эти катионы.", unit: "ионы", answer: ["катионы водорода", "h+"] },
+        { id: "q9", num: 9, text: "Раствор сульфата меди(II) CuSO4 имеет голубую окраску за счёт присутствующих в нём катионов. Назовите эти катионы (укажите заряд).", unit: "ионы", answer: ["ионы меди Cu2+"] },
+      ]
+    },
+    {
+      title: "Часть 3. ОВР и свойства металлов", meta: "3 задания · 2 балла каждое",
+      questions: [
+        { id: "q10", num: 10, text: "В процессе Zn0 − 2e− → Zn2+ атом цинка отдаёт электроны. Как называется такой процесс?", unit: "процесс", answer: ["окисление"] },
+        { id: "q11", num: 11, text: "Катализатор не расходуется в реакции, но снижает энергию активации. Как он влияет на скорость химической реакции?", unit: "влияние", answer: ["увеличивает", "ускоряет"] },
+        { id: "q12", num: 12, text: "Вещества этого класса обладают характерным блеском, ковкостью, высокой электро- и теплопроводностью. Как называется такой класс простых веществ?", unit: "класс веществ", answer: ["металл"] },
+      ]
+    },
+    {
+      title: "Часть 4. Реакции и среда растворов", meta: "2 задания · 2 балла каждое",
+      questions: [
+        { id: "q13", num: 13, text: "Реакция нейтрализации: NaOH + HCl → ? + H2O. Какая соль образуется в результате этой реакции?", unit: "соль", answer: ["NaCl", "хлорид натрия"] },
+        { id: "q14", num: 14, text: "Раствор гидроксида натрия NaOH окрашивает фенолфталеин в малиновый цвет. Какая это среда — кислая, нейтральная или щелочная?", unit: "среда", answer: ["щелочная"] },
+      ]
+    },
+    {
+      title: "Часть 5. Расчёты", meta: "2 задания · 4 балла каждое",
+      questions: [
+        { id: "q15", num: 15, text: "В 200 г раствора содержится 30 г растворённого вещества. Вычислите массовую долю этого вещества в растворе.", unit: "%", answer: 15 },
+        { id: "q16", num: 16, text: "Сколько литров водорода (н.у.) выделится при растворении 2 моль цинка в избытке соляной кислоты: Zn + 2HCl → ZnCl2 + H2↑?", unit: "л", answer: 44.8 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

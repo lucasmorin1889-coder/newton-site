@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по химии — 11 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "chemistry_11",
+  subject: "Химия",
+  grade: "11 класс",
+  title: "Входной тест по химии",
+  description: "Диагностика знаний за курс 8–10 класса для тех, кто перешёл в 11-й: органическая химия, классы углеводородов, расчёты.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Основные понятия органической химии и расчёты", meta: "6 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Сколько атомов углерода содержится в молекуле этана C2H6?", unit: "атомов", answer: 2 },
+        { id: "q2", num: 2, text: "Вычислите молярную массу этанола C2H5OH (Ar(C)=12, Ar(H)=1, Ar(O)=16).", unit: "г/моль", answer: 46 },
+        { id: "q3", num: 3, text: "Сколько атомов водорода содержится в молекуле метана CH4?", unit: "атомов", answer: 4 },
+        { id: "q4", num: 4, text: "Молярная масса этанола C2H5OH равна 46 г/моль. Сколько моль вещества содержится в образце этанола массой 4,6 г?", unit: "моль", answer: 0.1 },
+        { id: "q5", num: 5, text: "Какой объём (н.у.) займут 0,5 моль газообразного этилена C2H4, если молярный объём газа при нормальных условиях равен 22,4 л/моль?", unit: "л", answer: 11.2 },
+        { id: "q6", num: 6, text: "Сколько атомов углерода содержится в молекуле бутана C4H10?", unit: "атомов", answer: 4 },
+      ]
+    },
+    {
+      title: "Часть 2. Классы углеводородов и функциональные группы", meta: "3 задания · 2 балла каждое",
+      questions: [
+        { id: "q7", num: 7, text: "Углеводороды с общей формулой CnH2n, в молекулах которых есть одна двойная связь C=C, называются...", unit: "класс углеводородов", answer: ["алкены"] },
+        { id: "q8", num: 8, text: "Предельные углеводороды с общей формулой CnH2n+2, все связи между атомами углерода в которых одинарные, называются...", unit: "класс углеводородов", answer: ["алканы"] },
+        { id: "q9", num: 9, text: "Какая функциональная группа определяет свойства класса спиртов?", unit: "функциональная группа", answer: ["гидроксильная группа", "−OH"] },
+      ]
+    },
+    {
+      title: "Часть 3. Типы реакций и изомерия", meta: "3 задания · 2 балла каждое",
+      questions: [
+        { id: "q10", num: 10, text: "Определите тип реакции: CH4 + Cl2 → CH3Cl + HCl (на свету)", unit: "тип реакции", answer: ["замещения"] },
+        { id: "q11", num: 11, text: "Определите тип реакции: C2H4 + Br2 → C2H4Br2", unit: "тип реакции", answer: ["присоединения"] },
+        { id: "q12", num: 12, text: "Бутан C4H10 и изобутан (2-метилпропан) имеют одинаковую молекулярную формулу, но разное строение молекул. Как называются такие вещества?", unit: "термин", answer: ["изомеры"] },
+      ]
+    },
+    {
+      title: "Часть 4. Кислородсодержащие органические вещества", meta: "2 задания · 2 балла каждое",
+      questions: [
+        { id: "q13", num: 13, text: "Вещества, содержащие функциональную группу −COOH, называются...", unit: "класс веществ", answer: ["карбоновые кислоты"] },
+        { id: "q14", num: 14, text: "При полном сгорании любых углеводородов в кислороде, помимо воды, всегда образуется этот газ. Назовите его.", unit: "газ", answer: ["углекислый газ", "CO2"] },
+      ]
+    },
+    {
+      title: "Часть 5. Расчёты", meta: "2 задания · 4 балла каждое",
+      questions: [
+        { id: "q15", num: 15, text: "В результате полимеризации 100 г этилена теоретически можно получить 100 г полиэтилена, а практически получили 75 г. Вычислите практический выход продукта реакции.", unit: "%", answer: 75 },
+        { id: "q16", num: 16, text: "Вычислите молярную массу углекислого газа CO2 (Ar(C)=12, Ar(O)=16), который образуется при горении углеводородов.", unit: "г/моль", answer: 44 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

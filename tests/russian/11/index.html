@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по русскому языку — 11 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "russian_11",
+  subject: "Русский язык",
+  grade: "11 класс",
+  title: "Входной тест по русскому языку",
+  description: "Диагностика знаний за начальную школу и с 5 по 10 класс для тех, кто перешёл в 11-й: орфоэпия, средства выразительности, культура речи.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Орфография и произношение", meta: "6 заданий · 8 баллов",
+      questions: [
+        { id: "q1", num: 1, text: "Вставьте букву в личном окончании глагола: Он бор...тся за победу.", unit: "буква", answer: ["е"] },
+        { id: "q2", num: 2, text: "Вставьте буквы в суффиксе относительного прилагательного (от слова «письмо»): письм...ый стол", unit: "буквы", answer: ["нн"] },
+        { id: "q3", num: 3, text: "Как пишется «не» при явном противопоставлении в предложении «Пришёл не он, а его друг.» — слитно или раздельно?", unit: "слитно/раздельно", answer: ["раздельно"] },
+        { id: "q4", num: 4, text: "Верно ли, что по нормам литературного языка в слове «звонит» ударение падает на последний слог (звони́т)?", unit: "да/нет", answer: ["да"] },
+        { id: "q5", num: 5, text: "Вставьте пропущенную гласную (проверочное слово «мир»): прим...рять поссорившихся друзей", unit: "буква", answer: ["и"] },
+        { id: "q6", num: 6, text: "Вставьте букву в приставке перед глухим согласным: и...кусный мастер", unit: "буква", answer: ["с"] },
+      ]
+    },
+    {
+      title: "Часть 2. Средства выразительности и грамматические нормы", meta: "6 заданий · 10 баллов",
+      questions: [
+        { id: "q7", num: 7, text: "Сколько грамматических основ в предложении: «Когда солнце село рыбаки уставшие за день вернулись домой и посёлок затих»?", unit: "число", answer: 3 },
+        { id: "q8", num: 8, text: "Поставьте существительное «яблоки» в родительный падеж множественного числа: «Мы купили килограмм ...»", unit: "слово", answer: ["яблок"] },
+        { id: "q9", num: 9, text: "Определите часть речи слова «вследствие» в предложении: «Вследствие сильного снегопада рейсы задержали.»", unit: "часть речи", answer: ["предлог"] },
+        { id: "q10", num: 10, text: "Определите средство выразительности в словосочетании «звонкая тишина».", unit: "средство выразительности", answer: ["оксюморон"] },
+        { id: "q11", num: 11, text: "Определите средство выразительности: «И ветер, и дождь, и холод — ничто не могло остановить путников.»", unit: "средство выразительности", answer: ["многосоюзие", "полисиндетон"] },
+        { id: "q12", num: 12, text: "Определите средство выразительности: «Весь стадион аплодировал команде.»", unit: "средство выразительности", answer: ["метонимия"] },
+      ]
+    },
+    {
+      title: "Часть 3. Культура речи", meta: "2 задания · 6 баллов",
+      questions: [
+        { id: "q13", num: 13, text: "Образуйте сравнительную степень наречия «хорошо».", unit: "слово", answer: ["лучше"] },
+        { id: "q14", num: 14, text: "Вставьте местоимение в нужном падеже (учить кого? чему?): «То, ... нас учили в школе, пригодилось в жизни.»", unit: "слово", answer: ["чему"] },
+      ]
+    },
+    {
+      title: "Часть 4. Текст и стиль", meta: "2 задания · 6 баллов",
+      questions: [
+        { id: "q15", num: 15, text: "Сколько причастных оборотов в предложении: «Туман, окутавший озеро, постепенно рассеивался.»?", unit: "число", answer: 1 },
+        { id: "q16", num: 16, text: "Определите стиль текста: «Настоящий договор вступает в силу с момента подписания сторонами и действует до полного исполнения обязательств.»", unit: "стиль речи", answer: ["официально-деловой"] },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

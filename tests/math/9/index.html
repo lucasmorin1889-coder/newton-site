@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по математике — 9 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "math_9",
+  subject: "Математика",
+  grade: "9 класс",
+  title: "Входной тест по математике",
+  description: "Диагностика знаний за курс 7–8 класса для тех, кто перешёл в 9-й: алгебра, уравнения, функции, геометрия.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 19,
+  sections: [
+    {
+      title: "Часть 1. Алгебраические выражения", meta: "5 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Найдите значение выражения: 3² + 2 × 4", unit: "число", answer: 17 },
+        { id: "q2", num: 2, text: "Упростите: 6a − 3b + 4a − 4b", unit: "выражение", answer: "10a − 7b" },
+        { id: "q3", num: 3, text: "Упростите выражение и вычислите его значение: 2² × 2³", unit: "степень / число", answer: "2⁵ (32)" },
+        { id: "q4", num: 4, text: "Найдите значение выражения a² + b при a = 3, b = 2", unit: "число", answer: 11 },
+        { id: "q5", num: 5, text: "Раскройте скобки: (x − 4)(x + 4)", unit: "выражение", answer: "x² − 16" },
+      ]
+    },
+    {
+      title: "Часть 2. Уравнения и неравенства", meta: "10 баллов",
+      questions: [
+        { id: "q6", num: 6, text: "Решите уравнение: 3x − 7 = 8", unit: "x = ?", answer: 5 },
+        { id: "q7", num: 7, text: "Решите уравнение: x² = 9", unit: "x = ?", answer: "3; −3" },
+        { id: "q8", num: 8, text: "Решите неравенство: 2x − 4 > 2", unit: "x ?", answer: "x > 3" },
+        { id: "q9x", num: 9.1, text: "Решите систему уравнений: { x + y = 7; x − y = 1 }. Чему равен x?", unit: "x = ?", answer: 4 },
+        { id: "q9y", num: 9.2, text: "Решите ту же систему уравнений: { x + y = 7; x − y = 1 }. Чему равен y?", unit: "y = ?", answer: 3 },
+        { id: "q10a", num: 10.1, text: "Решите уравнение: 2x² − 13x + 15 = 0. Найдите больший из двух корней.", unit: "x = ?", answer: 5 },
+        { id: "q10b", num: 10.2, text: "Решите то же уравнение 2x² − 13x + 15 = 0. Найдите меньший из двух корней.", unit: "x = ?", answer: 1.5 },
+      ]
+    },
+    {
+      title: "Часть 3. Функции", meta: "3 балла",
+      questions: [
+        { id: "q11ox", num: 11.1, text: "Дана прямая y = −x + 2. Найдите точку пересечения этой прямой с осью Ox.", unit: "(x; 0)", answer: "(2; 0)" },
+        { id: "q11oy", num: 11.2, text: "Найдите точку пересечения той же прямой y = −x + 2 с осью Oy.", unit: "(0; y)", answer: "(0; 2)" },
+      ]
+    },
+    {
+      title: "Часть 4. Геометрия", meta: "12 баллов",
+      questions: [
+        { id: "q12", num: 12, text: "Катеты прямоугольного треугольника равны 6 см и 8 см. Найдите гипотенузу.", unit: "см", answer: 10 },
+        { id: "q13", num: 13, text: "Сторона квадрата равна 9 см. Найдите площадь этого квадрата.", unit: "см²", answer: 81 },
+        { id: "q14", num: 14, text: "Внешний угол треугольника равен 110°. Найдите смежный с ним внутренний угол.", unit: "°", answer: 70 },
+        { id: "q15a", num: 15.1, text: "В треугольнике один из углов равен 30°, а разность двух других углов равна 10°. Найдите больший из этих двух углов.", unit: "°", answer: 80 },
+        { id: "q15b", num: 15.2, text: "В том же треугольнике найдите меньший из этих двух углов.", unit: "°", answer: 70 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

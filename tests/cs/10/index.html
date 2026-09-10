@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по информатике — 10 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "cs_10",
+  subject: "Информатика",
+  grade: "10 класс",
+  title: "Входной тест по информатике",
+  description: "Диагностика знаний за курс 9 класса для тех, кто перешёл в 10-й: таблицы, базы данных, сети, моделирование.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Электронные таблицы", meta: "6 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "В ячейке A1 записано число, в ячейке B1 — другое число. Какую формулу нужно ввести в ячейку C1, чтобы сложить значения A1 и B1?", unit: "формула", answer: "=A1+B1" },
+        { id: "q2", num: 2, text: "Как называется функция в электронных таблицах, которая вычисляет среднее арифметическое значений в диапазоне ячеек?", unit: "функция", answer: "СРЗНАЧ" },
+        { id: "q3", num: 3, text: "В диапазоне A1:A5 записаны числа: 5, 3, 5, 5, 2. Сколько ячеек в этом диапазоне равно 2?", unit: "число", answer: 1 },
+        { id: "q4", num: 4, text: "Функция СЧЁТ(A1:A5) подсчитывает количество ячеек, содержащих числа. В диапазоне A1:A5 записаны значения: 5, 3, 8, 2, «текст». Чему будет равен результат СЧЁТ(A1:A5)?", unit: "число", answer: 4 },
+        { id: "q5", num: 5, text: "В ячейке A1 записано число 12, в ячейке B1 — число 5. В ячейку C1 ввели формулу =A1+B1. Какое значение появится в ячейке C1?", unit: "число", answer: 17 },
+        { id: "q6", num: 6, text: "В ячейке A1 записано число 8, в ячейке B1 — тоже 8. В ячейку C1 ввели формулу =A1-B1. Какое значение появится в ячейке C1?", unit: "число", answer: 0 },
+      ]
+    },
+    {
+      title: "Часть 2. Базы данных", meta: "6 баллов",
+      questions: [
+        { id: "q7", num: 7, text: "Как называется организованная структура для хранения, поиска и обработки больших объёмов связанных данных, например каталог товаров интернет-магазина?", unit: "термин", answer: ["база данных"] },
+        { id: "q8", num: 8, text: "Как называется столбец таблицы базы данных, содержащий однотипные данные, например «Имя» или «Возраст»?", unit: "термин", answer: ["поле"] },
+        { id: "q9", num: 9, text: "Как называется строка таблицы базы данных, содержащая полный набор данных об одном объекте, например об одном ученике?", unit: "термин", answer: ["запись"] },
+      ]
+    },
+    {
+      title: "Часть 3. Компьютерные сети", meta: "6 баллов",
+      questions: [
+        { id: "q10", num: 10, text: "Как называется уникальный числовой адрес устройства в сети, например 192.168.0.1?", unit: "термин", answer: ["IP-адрес"] },
+        { id: "q11", num: 11, text: "Как называется протокол, по которому браузер загружает веб-страницы? Напишите русское название и англоязычную аббревиатуру через запятую (например: протокол передачи файлов, FTP).", unit: "название, аббревиатура", answer: ["протокол передачи гипертекста", "HTTP"] },
+        { id: "q12", num: 12, text: "Как называется служба в интернете, которая преобразует доменное имя сайта (например, yandex.ru) в его IP-адрес?", unit: "термин", answer: ["DNS"] },
+      ]
+    },
+    {
+      title: "Часть 4. Моделирование", meta: "4 балла",
+      questions: [
+        { id: "q13", num: 13, text: "Как называется упрощённое представление объекта или процесса, отражающее его существенные свойства? Например, глобус — это ... Земли.", unit: "термин", answer: ["модель"] },
+        { id: "q14", num: 14, text: "Как называется движение тела, при котором оно за любые равные промежутки времени проходит одинаковый путь?", unit: "термин", answer: ["равномерное движение"] },
+      ]
+    },
+    {
+      title: "Часть 5. Задачи на моделирование", meta: "8 баллов",
+      questions: [
+        { id: "q15", num: 15, text: "Тело движется равномерно со скоростью 23 м/с. Какой путь (в метрах) оно пройдёт за 2 секунды?", unit: "число", answer: 46 },
+        { id: "q16", num: 16, text: "Автомобиль движется равномерно со скоростью 60 км/ч. Какой путь (в километрах) он пройдёт за 2 часа?", unit: "число", answer: 120 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

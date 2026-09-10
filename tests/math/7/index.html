@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по математике — 7 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "math_7",
+  subject: "Математика",
+  grade: "7 класс",
+  title: "Входной тест по математике",
+  description: "Диагностика знаний за курс 6 класса для тех, кто перешёл в 7-й: дроби, отрицательные числа, уравнения, окружность, отношения.",
+  duration_min: 35,
+  max_score: 30,
+  total_questions: 14,
+  sections: [
+    {
+      title: "Часть 1. Вычисления с отрицательными числами", meta: "4 задания · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "−2,5 + 3 =", unit: "число", answer: 0.5 },
+        { id: "q2", num: 2, text: "3/4 + 1/2 =", unit: "число", answer: 1.25 },
+        { id: "q3", num: 3, text: "(−8) × (−4) =", unit: "число", answer: 32 },
+        { id: "q4", num: 4, text: "(−15) × (−5) =", unit: "число", answer: 75 },
+      ]
+    },
+    {
+      title: "Часть 2. Уравнения", meta: "8 баллов",
+      questions: [
+        { id: "q5", num: 5, text: "Решите уравнение: x + (−4) = 2", unit: "x = ?", answer: 6 },
+        { id: "q6", num: 6, text: "Решите уравнение: x/4 = 3", unit: "x = ?", answer: 12 },
+        { id: "q7", num: 7, text: "Решите уравнение: −2x + 20 = 6", unit: "x = ?", answer: 7 },
+        { id: "q8", num: 8, text: "Решите уравнение: 2x − 7 = 29", unit: "x = ?", answer: 18 },
+      ]
+    },
+    {
+      title: "Часть 3. Отношения и пропорции", meta: "4 балла",
+      questions: [
+        { id: "q10", num: 10, text: "Решите пропорцию: x/4 = 51/12", unit: "x = ?", answer: 17 },
+        { id: "q12", num: 12, text: "Решите пропорцию: 18/x = 27/6", unit: "x = ?", answer: 4 },
+      ]
+    },
+    {
+      title: "Часть 4. Окружность", meta: "6 баллов",
+      questions: [
+        { id: "q13", num: 13, text: "Найдите длину окружности радиусом 5 см (π ≈ 3,14)", unit: "см", answer: 31.4 },
+        { id: "q14", num: 14, text: "Радиус окружности равен 18 см. Найдите её диаметр.", unit: "см", answer: 36 },
+      ]
+    },
+    {
+      title: "Часть 5. Текстовые задачи", meta: "8 баллов",
+      questions: [
+        { id: "q15", num: 15, text: "На остров Кижи в первый рейс катер привёз 180 туристов, во второй рейс — на 100 туристов больше, чем в первый. Сколько туристов побывало на острове за оба рейса?", unit: "туристов", answer: 460 },
+        { id: "q16", num: 16, text: "Три подруги поровну разделили 40,5 кг черники, собранной в лесу под Петрозаводском. Сколько килограммов получила каждая?", unit: "кг", answer: 13.5 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

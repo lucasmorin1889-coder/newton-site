@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по русскому языку — 6 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "russian_6",
+  subject: "Русский язык",
+  grade: "6 класс",
+  title: "Входной тест по русскому языку",
+  description: "Диагностика знаний за начальную школу и 5 класс для тех, кто перешёл в 6-й: орфограммы, лексика, словообразование, синтаксис.",
+  duration_min: 30,
+  max_score: 30,
+  total_questions: 17,
+  sections: [
+    {
+      title: "Часть 1. Орфограммы", meta: "6 заданий · 8 баллов",
+      questions: [
+        { id: "q1", num: 1, text: "Вставьте пропущенную согласную (проверочное слово «гриб»): гри...ки", unit: "буква", answer: ["б"] },
+        { id: "q2", num: 2, text: "Вставьте пропущенную гласную (проверочное слово «лист»): л...ства", unit: "буква", answer: ["и"] },
+        { id: "q3", num: 3, text: "Вставьте пропущенную гласную (проверочное слово «дерево»): д...ревья", unit: "буква", answer: ["е"] },
+        { id: "q4", num: 4, text: "Верно ли: частица «не» с глаголами всегда пишется раздельно, кроме слов, которые без «не» не употребляются?", unit: "да/нет", answer: ["да"] },
+        { id: "q5", num: 5, text: "Вставьте гласную в корне с чередованием (после корня стоит суффикс -а-): бл...стать", unit: "буква", answer: ["и"] },
+        { id: "q6", num: 6, text: "Вставьте гласную в корне с чередованием (суффикса -а- после корня нет): к...снуться", unit: "буква", answer: ["о"] },
+      ]
+    },
+    {
+      title: "Часть 2. Словообразование и состав слова", meta: "4 задания · 6 баллов",
+      questions: [
+        { id: "q7", num: 7, text: "Каким способом образовано слово «подоконник» от слова «окно»?", unit: "способ образования", answer: ["приставочно-суффиксальный"] },
+        { id: "q8", num: 8, text: "Как называются слова, которые пишутся и звучат одинаково, но имеют разные, никак не связанные между собой значения (например, «коса» — причёска и «коса» — орудие для косьбы)?", unit: "термин", answer: ["омонимы"] },
+        { id: "q9a", num: 9, text: "Разберите слово «лесник» по составу. Выпишите корень.", unit: "морфема", answer: "лес" },
+        { id: "q9b", num: 10, text: "Разберите слово «лесник» по составу. Выпишите суффикс.", unit: "морфема", answer: "ник" },
+      ]
+    },
+    {
+      title: "Часть 3. Морфология и синтаксис", meta: "3 задания · 6 баллов",
+      questions: [
+        { id: "q10", num: 11, text: "Найдите однородные подлежащие и выпишите их через запятую: «Грибы, ягоды — главные дары карельского леса.»", unit: "слова через запятую", answer: ["грибы", "ягоды"] },
+        { id: "q11", num: 12, text: "Найдите в предложении разносклоняемое существительное: «У Ани совсем не осталось времени на сборы.»", unit: "слово", answer: ["времени", "время"] },
+        { id: "q12", num: 13, text: "Сколько запятых нужно поставить в предложении: «Онежское озеро зимой замерзает но лёд неровный»?", unit: "число", answer: 1 },
+      ]
+    },
+    {
+      title: "Часть 4. Лексика", meta: "2 задания · 4 балла",
+      questions: [
+        { id: "q13", num: 14, text: "Подберите синоним к слову «огромный»: «Мы увидели ... валун на берегу озера.»", unit: "слово", answer: ["большой", "громадный", "гигантский", "колоссальный"] },
+        { id: "q14", num: 15, text: "Подберите синоним к слову «опечалиться».", unit: "слово", answer: ["загрустить", "огорчиться", "расстроиться"] },
+      ]
+    },
+    {
+      title: "Часть 5. Морфология", meta: "2 задания · 6 баллов",
+      questions: [
+        { id: "q15", num: 16, text: "Определите часть речи слова «наизусть» в предложении: «Мальчик рассказал стихотворение наизусть.»", unit: "часть речи", answer: ["наречие"] },
+        { id: "q16", num: 17, text: "Сколько наречий в предложении: «Он тихо и спокойно вошёл в комнату.»?", unit: "число", answer: 2 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по информатике — 7 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "cs_7",
+  subject: "Информатика",
+  grade: "7 класс",
+  title: "Входной тест по информатике",
+  description: "Проверка готовности к старту информатики: компьютерная грамотность, логика, безопасность, файлы.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Компьютер и программы", meta: "5 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Какое устройство компьютера используется для ввода текста с помощью нажатия клавиш?", unit: "устройство", answer: ["клавиатура"] },
+        { id: "q2", num: 2, text: "Как называется место на компьютере, где хранятся сгруппированные файлы (например, «Мои документы»)?", unit: "слово", answer: ["папка", "директория"] },
+        { id: "q3", num: 3, text: "Как называется программа, с помощью которой открывают сайты в интернете (например, Chrome или Яндекс Браузер)?", unit: "программа", answer: ["браузер"] },
+        { id: "q4", num: 4, text: "Ты сохранил текстовый документ в программе Microsoft Word. Какое расширение будет у этого файла?", unit: "расширение", answer: ["docx", ".docx"] },
+        { id: "q5", num: 5, text: "Что нужно придумать и держать в секрете, чтобы никто посторонний не смог войти в твой аккаунт в интернете?", unit: "слово", answer: ["пароль"] },
+      ]
+    },
+    {
+      title: "Часть 2. Логика", meta: "5 заданий · 1 балл каждое",
+      questions: [
+        { id: "q6", num: 6, text: "Продолжи закономерность: 1, 2, 4, 8, ___", unit: "число", answer: 16 },
+        { id: "q7", num: 7, text: "Утверждение: «Компьютерной мышью нельзя рисовать в графическом редакторе». Это утверждение истинно или ложно?", unit: "истинно/ложно", answer: ["ложно"] },
+        { id: "q8", num: 8, text: "Утверждение: «Каждый файл на компьютере хранится в какой-нибудь папке или на рабочем столе». Это утверждение истинно или ложно?", unit: "истинно/ложно", answer: ["истинно"] },
+        { id: "q9", num: 9, text: "На флешке создали 8 папок и в каждую сохранили по 4 файла. Сколько всего файлов сохранили на флешке?", unit: "число", answer: 32 },
+        { id: "q10", num: 10, text: "Нужно ли подключение к интернету, чтобы открыть текстовый документ, уже сохранённый на компьютере?", unit: "да/нет", answer: ["нет"] },
+      ]
+    },
+    {
+      title: "Часть 3. Безопасность в интернете", meta: "4 балла",
+      questions: [
+        { id: "q11", num: 11, text: "Как называется вредоносная программа, которая может испортить файлы или украсть данные с компьютера?", unit: "слово", answer: ["вирус"] },
+        { id: "q12", num: 12, text: "Тебе пришло сообщение от незнакомца: «Ты выиграл приз! Перейди по ссылке и получи его». Как правильно поступить с такой ссылкой? Ответь коротко в формате «действие / действие» (например: сообщить взрослым / заблокировать отправителя).", unit: "действие / действие", answer: ["не открывать ссылку", "удалить"] },
+      ]
+    },
+    {
+      title: "Часть 4. Файлы и папки", meta: "6 баллов",
+      questions: [
+        { id: "q13", num: 13, text: "Ты набрал в Word сочинение и сохранил его на компьютер, чтобы отправить учителю. Какое расширение будет у этого файла?", unit: "расширение", answer: ["docx", ".docx"] },
+        { id: "q14", num: 14, text: "Как называется место на компьютере, куда попадают удалённые файлы и откуда их ещё можно восстановить?", unit: "слово", answer: ["корзина"] },
+      ]
+    },
+    {
+      title: "Часть 5. Логические задачи", meta: "10 баллов",
+      questions: [
+        { id: "q15", num: 15, text: "На флеш-накопителе создали 5 папок и в каждую сохранили по 12 фотографий. Сколько всего фотографий сохранили на флешке?", unit: "число", answer: 60 },
+        { id: "q16", num: 16, text: "На уроке информатики 4 команды по 9 человек защищали свои проекты. Сколько всего учеников участвовало?", unit: "число", answer: 36 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

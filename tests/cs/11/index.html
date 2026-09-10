@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по информатике — 11 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "cs_11",
+  subject: "Информатика",
+  grade: "11 класс",
+  title: "Входной тест по информатике",
+  description: "Диагностика знаний за курс 10 класса для тех, кто перешёл в 11-й: системы счисления, программирование, безопасность.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Системы счисления", meta: "6 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Переведите число 255 из десятичной системы счисления в шестнадцатеричную.", unit: "шестнадцатеричное число", answer: "FF" },
+        { id: "q2", num: 2, text: "Переведите шестнадцатеричную цифру A в десятичную систему счисления.", unit: "число", answer: 10 },
+        { id: "q3", num: 3, text: "Утверждение: «Число FF в шестнадцатеричной системе счисления соответствует чётному числу в десятичной записи». Это утверждение истинно или ложно?", unit: "истинно/ложно", answer: ["ложно"] },
+        { id: "q4", num: 4, text: "Сколько байт содержится в одном килобайте?", unit: "число", answer: 1024 },
+        { id: "q5", num: 5, text: "Переведите число 2 из десятичной системы счисления в двоичную.", unit: "двоичное число", answer: "10" },
+        { id: "q6", num: 6, text: "Переведите двоичное число 10 в десятичную систему счисления.", unit: "число", answer: 2 },
+      ]
+    },
+    {
+      title: "Часть 2. Программирование", meta: "6 баллов",
+      questions: [
+        { id: "q7", num: 7, text: "Как называется способ построения алгоритма, при котором функция или процедура вызывает сама себя?", unit: "термин", answer: ["рекурсивная", "рекурсия"] },
+        { id: "q8", num: 8, text: "Рекурсивная функция f(n): f(0) = 1, а при n > 0 значение f(n) = f(n−1) × 2. Чему равно f(4)?", unit: "число", answer: 16 },
+        { id: "q9", num: 9, text: "Как называется процесс упорядочивания элементов массива по возрастанию или убыванию?", unit: "термин", answer: ["сортировка"] },
+      ]
+    },
+    {
+      title: "Часть 3. Безопасность", meta: "6 баллов",
+      questions: [
+        { id: "q10", num: 10, text: "Как называется процесс преобразования информации в вид, недоступный для чтения без специального ключа, для защиты данных?", unit: "термин", answer: ["шифрование"] },
+        { id: "q11", num: 11, text: "Как называется программа, которая обнаруживает и удаляет вредоносное программное обеспечение на компьютере?", unit: "термин", answer: ["антивирус"] },
+        { id: "q12", num: 12, text: "Как называется вид интернет-мошенничества, при котором злоумышленники создают поддельные сайты или письма, чтобы выманить у пользователя пароли или данные банковской карты? Напишите термин и через запятую — поясняющее слово-синоним (например: вредоносная программа, вирус).", unit: "термин, синоним", answer: ["выуживание личных данных", "обман"] },
+      ]
+    },
+    {
+      title: "Часть 4. Форматы и вёрстка", meta: "4 балла",
+      questions: [
+        { id: "q13", num: 13, text: "Какое расширение обычно имеют файлы растровых изображений, сохранённых со сжатием, например фотографии из интернета?", unit: "расширение", answer: ["jpeg", "jpg"] },
+        { id: "q14", num: 14, text: "Какой тег HTML используется для обозначения абзаца текста?", unit: "тег", answer: ["p", "<p>"] },
+      ]
+    },
+    {
+      title: "Часть 5. Задачи", meta: "8 баллов",
+      questions: [
+        { id: "q15", num: 15, text: "При шифровании методом Цезаря каждая буква сдвигается на 3 позиции вперёд по алфавиту. Буква изначально стояла под номером 7. Под каким номером она окажется после сдвига?", unit: "число", answer: 10 },
+        { id: "q16", num: 16, text: "Рекурсивная функция удваивает число, начиная с 1, и вызывается подряд 6 раз (1→2→4→8→16→32→64). Чему будет равно значение после 6 удвоений?", unit: "число", answer: 64 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

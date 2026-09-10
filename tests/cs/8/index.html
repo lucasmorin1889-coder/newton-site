@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по информатике — 8 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "cs_8",
+  subject: "Информатика",
+  grade: "8 класс",
+  title: "Входной тест по информатике",
+  description: "Диагностика знаний за курс 7 класса для тех, кто перешёл в 8-й: измерение информации, устройство компьютера, кодирование.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Измерение информации", meta: "2 задания · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Сколько бит содержится в одном байте?", unit: "число", answer: 8 },
+        { id: "q2", num: 2, text: "Сколько байт содержится в одном килобайте (по правилам информатики)?", unit: "число", answer: 1024 },
+      ]
+    },
+    {
+      title: "Часть 2. Системы счисления", meta: "2 задания · 1 балл каждое",
+      questions: [
+        { id: "q3", num: 3, text: "Переведите число 5 из десятичной системы счисления в двоичную.", unit: "двоичное число", answer: "101" },
+        { id: "q4", num: 4, text: "Переведите число 1010 из двоичной системы счисления в десятичную.", unit: "число", answer: 10 },
+      ]
+    },
+    {
+      title: "Часть 3. Кодирование информации", meta: "4 балла",
+      questions: [
+        { id: "q5", num: 5, text: "Сколько бит нужно, чтобы закодировать один символ алфавита, состоящего из 8 разных знаков?", unit: "число", answer: 3 },
+        { id: "q6", num: 6, text: "Сколько бит содержится в 4 байтах?", unit: "число", answer: 32 },
+      ]
+    },
+    {
+      title: "Часть 4. Устройства компьютера", meta: "6 баллов",
+      questions: [
+        { id: "q7", num: 7, text: "Как называется устройство компьютера, которое выполняет вычисления и обрабатывает команды программ — его часто называют «мозгом» компьютера?", unit: "устройство", answer: ["процессор"] },
+        { id: "q8", num: 8, text: "Как называется устройство, которое хранит данные и работающие программы только пока компьютер включён, а при выключении очищается? Напишите полное название и аббревиатуру через запятую (например: процессор, CPU).", unit: "название, аббревиатура", answer: ["оперативная память", "ОЗУ"] },
+        { id: "q9", num: 9, text: "Как называется устройство для долговременного хранения данных, которые сохраняются даже после выключения компьютера? Напишите полное название и аббревиатуру через запятую (например: процессор, CPU).", unit: "название, аббревиатура", answer: ["жёсткий диск", "HDD"] },
+      ]
+    },
+    {
+      title: "Часть 5. Кодирование и графика", meta: "6 баллов",
+      questions: [
+        { id: "q10", num: 10, text: "Сколько различных значений можно закодировать с помощью 8 бит (1 байта)?", unit: "число", answer: 256 },
+        { id: "q11", num: 11, text: "Как называется вид компьютерной графики, в котором изображение состоит из отдельных точек — пикселей?", unit: "термин", answer: ["растровая графика"] },
+        { id: "q12", num: 12, text: "Растровое изображение имеет размер 4 на 4 пикселя. Сколько всего пикселей в этом изображении?", unit: "число", answer: 16 },
+      ]
+    },
+    {
+      title: "Часть 6. Файлы", meta: "4 балла",
+      questions: [
+        { id: "q13", num: 13, text: "Как называется последовательность имён папок, указывающая расположение файла в файловой системе, например C:\\Users\\Ivan\\Documents\\report.docx?", unit: "термин", answer: ["путь", "путь к файлу"] },
+        { id: "q14", num: 14, text: "Какое расширение обычно имеют исполняемые файлы программ в Windows?", unit: "расширение", answer: ["exe", ".exe"] },
+      ]
+    },
+    {
+      title: "Часть 7. Задачи на измерение информации", meta: "6 баллов",
+      questions: [
+        { id: "q15", num: 15, text: "Документ занимает 3 страницы, на каждой странице по 1024 символа, каждый символ кодируется 1 байтом. Сколько байт займёт весь документ?", unit: "число", answer: 3072 },
+        { id: "q16", num: 16, text: "Сколько килобайт содержится в 8192 байтах?", unit: "число", answer: 8 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

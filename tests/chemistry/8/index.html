@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по химии — 8 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "chemistry_8",
+  subject: "Химия",
+  grade: "8 класс",
+  title: "Входной тест по химии",
+  description: "Проверка готовности к старту химии: величины, вещества и явления, смеси, безопасность в лаборатории.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Величины и единицы измерения", meta: "6 заданий · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Масса образца вещества — 250 г. Выразите эту массу в килограммах.", unit: "кг", answer: 0.25 },
+        { id: "q2", num: 2, text: "Объём мерной колбы — 2 л. Сколько это миллилитров?", unit: "мл", answer: 2000 },
+        { id: "q3", num: 3, text: "В растворе массой 100 г содержится 30 г соли. Найдите массовую долю соли в этом растворе.", unit: "%", answer: 30 },
+        { id: "q4", num: 4, text: "В колбе было 245 мл жидкости, после переливания осталось 240 мл. Сколько миллилитров жидкости отлили?", unit: "мл", answer: 5 },
+        { id: "q5", num: 5, text: "Для опыта на столе разложили: пробирку, спиртовку, держатель для пробирок, стеклянную палочку, шпатель и пипетку с грушей. Сколько предметов лабораторного оборудования перечислено?", unit: "шт.", answer: 6 },
+        { id: "q6", num: 6, text: "Смешали 6 г одного вещества и 10 г другого. Какова масса получившейся смеси?", unit: "г", answer: 16 },
+      ]
+    },
+    {
+      title: "Часть 2. Вещества, явления и смеси", meta: "5 заданий · 2 балла каждое",
+      questions: [
+        { id: "q7", num: 7, text: "Кусок льда растаял и превратился в воду, при этом новое вещество не образовалось. К какому виду явлений относится этот процесс?", unit: "физическое / химическое", answer: ["физическое"] },
+        { id: "q8", num: 8, text: "Железный гвоздь, оставленный во влажном месте, покрылся рыжим налётом — образовалось новое вещество (ржавчина). К какому виду явлений относится этот процесс?", unit: "физическое / химическое", answer: ["химическое"] },
+        { id: "q9", num: 9, text: "Кусок мела сохраняет и форму, и объём при обычных условиях. В каком агрегатном состоянии он находится?", unit: "агрегатное состояние", answer: ["твёрдое", "твердое"] },
+        { id: "q10", num: 10, text: "Как называется однородная смесь, которая образуется, когда сахар полностью растворяется в воде?", unit: "название смеси", answer: ["раствор"] },
+        { id: "q11", num: 11, text: "Как называется способ очистки воды от взвешенных частиц песка с помощью бумажного фильтра?", unit: "способ разделения", answer: ["фильтрование", "фильтрация"] },
+      ]
+    },
+    {
+      title: "Часть 3. Смеси: расчёты и безопасность", meta: "3 задания · 2 балла каждое",
+      questions: [
+        { id: "q12", num: 12, text: "Раствор массой 50 г содержит 48 г воды, остальное — растворённая соль. Найдите массу соли в этом растворе.", unit: "г", answer: 2 },
+        { id: "q13", num: 13, text: "Верно ли утверждение: «При кипении воды образуется новое вещество»? Ответьте «да» или «нет».", unit: "да / нет", answer: ["нет"] },
+        { id: "q14", num: 14, text: "Реактив случайно попал на кожу руки. Какое действие нужно выполнить в первую очередь?", unit: "действие", answer: ["промыть водой", "промыть проточной водой", "смыть водой"] },
+      ]
+    },
+    {
+      title: "Часть 4. Расчёты по растворам", meta: "2 задания · 4 балла каждое",
+      questions: [
+        { id: "q15", num: 15, text: "По инструкции по технике безопасности реактив, попавший на кожу, нужно смывать проточной водой не менее скольки минут?", unit: "мин", answer: 5 },
+        { id: "q16", num: 16, text: "В растворе массой 200 г массовая доля соли составляет 10%. Вычислите массу соли в этом растворе.", unit: "г", answer: 20 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

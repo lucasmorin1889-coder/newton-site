@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по математике — 10 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "math_10",
+  subject: "Математика",
+  grade: "10 класс",
+  title: "Входной тест по математике",
+  description: "Диагностика знаний за курс 9 класса для тех, кто перешёл в 10-й: квадратные уравнения, прогрессии, функции, геометрия.",
+  duration_min: 45,
+  max_score: 30,
+  total_questions: 18,
+  sections: [
+    {
+      title: "Часть 1. Вычисления", meta: "4 задания · 1 балл каждое",
+      questions: [
+        { id: "q1", num: 1, text: "Вычислите: 5 − 2²", unit: "число", answer: 1 },
+        { id: "q2", num: 2, text: "Вычислите: (−2)³ + 16", unit: "число", answer: 8 },
+        { id: "q3", num: 3, text: "Вычислите: 3 + 2 × 4", unit: "число", answer: 11 },
+        { id: "q4", num: 4, text: "Вычислите: 60 : 4", unit: "число", answer: 15 },
+      ]
+    },
+    {
+      title: "Часть 2. Тождественные преобразования", meta: "2 балла",
+      questions: [
+        { id: "q5", num: 5, text: "Раскройте скобки: 3(2a + 3)", unit: "выражение", answer: "6a+9" },
+      ]
+    },
+    {
+      title: "Часть 3. Уравнения и системы", meta: "10 баллов",
+      questions: [
+        { id: "q6", num: 6, text: "Решите уравнение: x² − 7x + 12 = 0", unit: "x₁ = ?, x₂ = ?", answer: ["x₁ = 3", "x₂ = 4"] },
+        { id: "q7", num: 7, text: "Решите уравнение: 4x + 12 = 0", unit: "x = ?", answer: "x = −3" },
+        { id: "q8", num: 8, text: "Решите уравнение: x² − 4 = 0", unit: "x₁ = ?, x₂ = ?", answer: ["x₁ = 2", "x₂ = −2"] },
+        { id: "q9x", num: 9.1, text: "Решите систему уравнений: { 2x + y = 11; x − y = 1 }. Чему равен x?", unit: "x = ?", answer: 4 },
+        { id: "q9y", num: 9.2, text: "Решите ту же систему уравнений: { 2x + y = 11; x − y = 1 }. Чему равен y?", unit: "y = ?", answer: 3 },
+        { id: "q10a", num: 10.1, text: "Решите уравнение: x² − 5x + 6 = 0. Найдите больший из двух корней.", unit: "x = ?", answer: 3 },
+        { id: "q10b", num: 10.2, text: "Решите то же уравнение x² − 5x + 6 = 0. Найдите меньший из двух корней.", unit: "x = ?", answer: 2 },
+      ]
+    },
+    {
+      title: "Часть 4. Прогрессии", meta: "6 баллов",
+      questions: [
+        { id: "q11a", num: 11.1, text: "Арифметическая прогрессия задана условиями: a₁ = 5, d = 3. Найдите десятый член прогрессии a₁₀.", unit: "a₁₀ = ?", answer: 32 },
+        { id: "q11b", num: 11.2, text: "В той же прогрессии (a₁ = 5, d = 3) найдите сумму первых 10 членов S₁₀.", unit: "S₁₀ = ?", answer: 185 },
+      ]
+    },
+    {
+      title: "Часть 5. Геометрия", meta: "8 баллов",
+      questions: [
+        { id: "q12", num: 12, text: "Катеты прямоугольного треугольника равны 9 см и 12 см. Найдите гипотенузу.", unit: "см", answer: 15 },
+        { id: "q13", num: 13, text: "Найдите площадь треугольника с основанием 10 см и высотой 9 см.", unit: "см²", answer: 45 },
+        { id: "q14", num: 14, text: "Основания трапеции равны 7 см и 13 см, а высота — 4 см. Найдите площадь трапеции.", unit: "см²", answer: 40 },
+        { id: "q15", num: 15, text: "Диагонали ромба равны 4 см и 9 см. Найдите площадь ромба.", unit: "см²", answer: 18 },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Входной тест по русскому языку — 8 класс — Ньютон</title>
+<link rel="icon" type="image/png" href="/favicon-32.png">
+<link rel="stylesheet" href="/tests/engine.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="brand">Образовательный центр «Ньютон»</div>
+
+  <div id="intro">
+    <h1 id="testTitle"></h1>
+    <p class="desc" id="testDesc"></p>
+    <div class="meta-row">
+      <div class="m"><b id="metaDuration"></b><span>минут</span></div>
+      <div class="m"><b id="metaQuestions"></b><span>заданий</span></div>
+      <div class="m"><b id="metaScore"></b><span>баллов max</span></div>
+    </div>
+    <div class="form-card">
+      <label for="studentName">ФИО ученика</label>
+      <input type="text" id="studentName" placeholder="Иванова Мария Сергеевна">
+      <label for="studentPhone">Телефон родителя</label>
+      <input type="tel" id="studentPhone" placeholder="+7 9XX XXX-XX-XX">
+      <button class="btn btn-primary" id="startBtn" disabled>Начать тест</button>
+      <button class="btn btn-ghost" id="printBtn">Распечатать бланк (для очного тестирования)</button>
+    </div>
+  </div>
+
+  <div id="testScreen" hidden>
+    <div class="topbar">
+      <span id="studentNameDisplay"></span>
+      <b id="answeredCount"></b>
+      <span id="timerDisplay"></span>
+    </div>
+    <div id="questionsRoot"></div>
+    <button class="btn btn-primary" id="finishBtn">Завершить тест и получить результат</button>
+  </div>
+
+  <div id="resultScreen" hidden>
+    <div id="resultRoot"></div>
+  </div>
+
+  <div id="printRoot"></div>
+</div>
+
+<script>
+const TEST = {
+  id: "russian_8",
+  subject: "Русский язык",
+  grade: "8 класс",
+  title: "Входной тест по русскому языку",
+  description: "Диагностика знаний за начальную школу и с 5 по 7 класс для тех, кто перешёл в 8-й: словосочетание, типы сказуемого, односоставные и осложнённые предложения.",
+  duration_min: 40,
+  max_score: 30,
+  total_questions: 16,
+  sections: [
+    {
+      title: "Часть 1. Орфограммы", meta: "6 заданий · 8 баллов",
+      questions: [
+        { id: "q1", num: 1, text: "Вставьте букву: Задача была реш...а (краткая форма причастия)", unit: "буква", answer: ["н"] },
+        { id: "q2", num: 2, text: "Вставьте частицу: Сколько я н... старался, задача не решалась.", unit: "не/ни", answer: ["ни"] },
+        { id: "q3", num: 3, text: "Как пишется наречие «по-новому» — слитно, раздельно или через дефис?", unit: "способ написания", answer: ["через дефис", "дефис"] },
+        { id: "q4", num: 4, text: "Вставьте букву в безударном окончании существительного после шипящей: с товарищ...м", unit: "буква", answer: ["е"] },
+        { id: "q5", num: 5, text: "Как пишется «не» со словом «здоров» в значении «болен»: «Он был (не)здоров и остался дома.» — слитно или раздельно?", unit: "слитно/раздельно", answer: ["слитно"] },
+        { id: "q6", num: 6, text: "Вставьте букву в приставке перед звонким согласным: бе...молвный", unit: "буква", answer: ["з"] },
+      ]
+    },
+    {
+      title: "Часть 2. Словосочетание и предложение", meta: "5 заданий · 10 баллов",
+      questions: [
+        { id: "q7", num: 7, text: "Определите тип связи в словосочетании «карельский лес».", unit: "тип связи", answer: ["согласование"] },
+        { id: "q8", num: 8, text: "Определите тип связи в словосочетании «любоваться озером».", unit: "тип связи", answer: ["управление"] },
+        { id: "q9", num: 9, text: "Определите тип сказуемого в предложении: «Погода была ветреной.»", unit: "тип сказуемого", answer: ["составное именное"] },
+        { id: "q10", num: 10, text: "Определите тип односоставного предложения: «На улице похолодало.»", unit: "тип предложения", answer: ["безличное"] },
+        { id: "q11", num: 11, text: "Найдите вводное слово в предложении: «Дождь, кажется, скоро закончится.»", unit: "слово", answer: ["кажется"] },
+      ]
+    },
+    {
+      title: "Часть 3. Синтаксис, лексика и стилистика", meta: "5 заданий · 12 баллов",
+      questions: [
+        { id: "q12", num: 12, text: "Сколько запятых нужно поставить в предложении: «Туристы уставшие после долгого похода вернулись в лагерь»?", unit: "число", answer: 2 },
+        { id: "q13", num: 13, text: "Сколько запятых нужно поставить в предложении: «На Онежском озере мы купались загорали удили рыбу отдыхали»?", unit: "число", answer: 3 },
+        { id: "q14", num: 14, text: "Подберите синоним к слову «чудесный».", unit: "слово", answer: ["прекрасный", "удивительный", "великолепный", "восхитительный"] },
+        { id: "q15", num: 15, text: "Выпишите грамматическую основу предложения через запятую (подлежащее, сказуемое): «Вечером мы с интересом смотрели документальный фильм.»", unit: "подлежащее, сказуемое", answer: ["мы", "смотрели"] },
+        { id: "q16", num: 16, text: "Определите стиль текста: «Фотосинтез — процесс образования органических веществ из неорганических с использованием энергии света, происходящий в хлоропластах растительных клеток.»", unit: "стиль речи", answer: ["научный"] },
+      ]
+    }
+  ]
+};
+</script>
+<script src="/tests/engine.js"></script>
+<script>NewtonTestEngine.init(TEST);</script>
+
+</body>
+</html>
