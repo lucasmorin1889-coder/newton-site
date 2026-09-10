@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Тесты на согласование — Ньютон</title>
+<style>
+:root{
+  --bg:#f4f5ea; --bg-card:#fdfdf7; --ink:#20221a; --ink-soft:#5c6152; --ink-faint:#8a8f7c;
+  --accent:#5f6a3d; --accent-soft:#e6e9d6; --accent-line:#c3cc9e; --rule:#dcd9c4; --rule-strong:#bdb890;
+  --warn-bg:#f7ecd8; --warn-line:#dcc48a; --warn-ink:#8a6a1f;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14160f; --bg-card:#1b1e14; --ink:#e7e6da; --ink-soft:#9da393; --ink-faint:#6d7264;
+    --accent:#9cb57a; --accent-soft:#232a19; --accent-line:#3a4429; --rule:#2a2d20; --rule-strong:#3c4030;
+    --warn-bg:#2a2414; --warn-line:#5c4c22; --warn-ink:#d6b869;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14160f; --bg-card:#1b1e14; --ink:#e7e6da; --ink-soft:#9da393; --ink-faint:#6d7264;
+  --accent:#9cb57a; --accent-soft:#232a19; --accent-line:#3a4429; --rule:#2a2d20; --rule-strong:#3c4030;
+  --warn-bg:#2a2414; --warn-line:#5c4c22; --warn-ink:#d6b869;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+#wrap{max-width:780px; margin:0 auto; padding:48px 24px 80px}
+.eyebrow{font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); font-weight:700; margin-bottom:10px}
+h1{font-size:1.7rem; font-weight:800; letter-spacing:-.02em; margin:0 0 10px; text-wrap:balance}
+.lede{color:var(--ink-soft); max-width:60ch; margin:0 0 8px}
+.stat-row{display:flex; gap:24px; margin:22px 0 28px; flex-wrap:wrap}
+.stat b{display:block; font-size:1.5rem; color:var(--accent); font-variant-numeric:tabular-nums}
+.stat span{font-size:.78rem; color:var(--ink-faint)}
+.notice{
+  background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:8px;
+  padding:14px 18px; font-size:.88rem; color:var(--warn-ink); margin-bottom:32px;
+}
+.notice b{color:inherit}
+.grid{display:grid; gap:14px}
+.card{
+  background:var(--bg-card); border:1px solid var(--rule); border-radius:10px;
+  padding:18px 22px;
+}
+.card-head{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:12px}
+.card-head h2{font-size:1.05rem; margin:0; font-weight:700}
+.card-head .count{font-size:.78rem; color:var(--ink-faint); font-variant-numeric:tabular-nums; white-space:nowrap}
+.chips{display:flex; flex-wrap:wrap; gap:7px}
+.chip{
+  display:inline-flex; align-items:center; gap:4px; text-decoration:none;
+  background:var(--accent-soft); border:1px solid var(--accent-line); color:var(--accent);
+  border-radius:6px; padding:5px 11px; font-size:.85rem; font-weight:600;
+  font-variant-numeric:tabular-nums;
+}
+.chip:hover{filter:brightness(1.08)}
+.chip::after{content:"класс"; font-weight:500; opacity:.75; margin-left:2px; font-size:.78em}
+footer{margin-top:40px; font-size:.78rem; color:var(--ink-faint); text-align:center}
+</style>
+</head>
+<body>
+
+<div id="wrap">
+  <div class="eyebrow">Ньютон · внутренняя проверка</div>
+  <h1>43 входных теста готовы к проверке</h1>
+  <p class="lede">Вопросы написаны заново под уже утверждённый ключ ответов — проверка идёт автоматически, результат совпадает с ключом. Открой любой класс и пройди тест как ученик, чтобы оценить формулировки.</p>
+
+  <div class="stat-row">
+    <div class="stat"><b>43</b><span>тестов</span></div>
+    <div class="stat"><b>7</b><span>предметов</span></div>
+    <div class="stat"><b>5–11</b><span>классы</span></div>
+  </div>
+
+  <div class="notice"><b>Пока не видно ученикам.</b> Каталог на сайте ещё указывает на старые ссылки — эти страницы уже работают, но найти их можно только по прямым ссылкам ниже.</div>
+
+  <div class="grid" id="cards"></div>
+
+  <footer>После проверки скажи, что публикуем — обновлю каталог и уберу этот баннер.</footer>
+</div>
+
+<script>
+const SUBJECTS = [
+  { id: 'math', name: 'Математика', grades: ['5','6','7','8','9','10','11'] },
+  { id: 'russian', name: 'Русский язык', grades: ['5','6','7','8','9','10','11'] },
+  { id: 'chemistry', name: 'Химия', grades: ['8','9','10','11'] },
+  { id: 'cs', name: 'Информатика', grades: ['7','8','9','10','11'] },
+  { id: 'society', name: 'Обществознание', grades: ['6','7','8','9','10','11'] },
+  { id: 'biology', name: 'Биология', grades: ['5','6','7','8','9','10','11'] },
+  { id: 'history', name: 'История', grades: ['5','6','7','8','9','10','11'] }
+];
+const BASE = 'https://newton-petrozavodsk.ru/tests/';
+const cards = document.getElementById('cards');
+SUBJECTS.forEach(s => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-head"><h2>${s.name}</h2><span class="count">${s.grades.length} класс${s.grades.length===1?'':(s.grades.length<5?'а':'ов')}</span></div>
+    <div class="chips">${s.grades.map(g => `<a class="chip" href="${BASE}${s.id}/${g}/" target="_blank" rel="noopener">${g}</a>`).join('')}</div>
+  `;
+  cards.appendChild(card);
+});
+</script>
+
+</body>
+</html>
