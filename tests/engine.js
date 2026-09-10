@@ -37,6 +37,7 @@
     const resultScreen = document.getElementById('resultScreen');
     const nameInput = document.getElementById('studentName');
     const phoneInput = document.getElementById('studentPhone');
+    const consentInput = document.getElementById('studentConsent');
     const startBtn = document.getElementById('startBtn');
     const printBtn = document.getElementById('printBtn');
     const finishBtn = document.getElementById('finishBtn');
@@ -53,10 +54,11 @@
     document.getElementById('metaScore').textContent = TEST.max_score;
 
     function checkFormValid() {
-      startBtn.disabled = !(nameInput.value.trim() && phoneInput.value.trim().length >= 10);
+      startBtn.disabled = !(nameInput.value.trim() && phoneInput.value.trim().length >= 10 && (!consentInput || consentInput.checked));
     }
     nameInput.addEventListener('input', checkFormValid);
     phoneInput.addEventListener('input', checkFormValid);
+    if (consentInput) consentInput.addEventListener('change', checkFormValid);
 
     let timerInterval = null;
     let remainingSeconds = TEST.duration_min * 60;
