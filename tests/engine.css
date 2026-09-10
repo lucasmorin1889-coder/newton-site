@@ -79,22 +79,35 @@ h1, h2 { font-weight: 800; letter-spacing: -0.02em; margin: 0; }
 .wrong-item:last-child { border-bottom: none; }
 
 /* PRINT SHEET */
-#printRoot { display: none; }
-.print-head { margin-bottom: 24px; }
-.print-brand { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; color: #555; margin-bottom: 6px; }
-.print-head h1 { font-size: 1.3rem; margin-bottom: 14px; }
-.print-fields { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px; }
-.print-section { margin-bottom: 20px; break-inside: avoid; }
-.print-section-head { font-weight: 700; border-bottom: 1px solid #999; padding-bottom: 4px; margin-bottom: 10px; font-size: 0.95rem; }
-.print-question { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; font-size: 0.92rem; break-inside: avoid; }
-.print-line { color: #555; font-size: 0.85rem; margin-top: 4px; }
+#printRoot { display: none; max-width: 720px; margin: 0 auto; padding: 28px; font-family: Georgia, "Times New Roman", serif; }
+.print-head { margin-bottom: 26px; border-bottom: 2px solid #222; padding-bottom: 14px; }
+.print-brand-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.print-brand { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.14em; color: #555; font-family: -apple-system, sans-serif; }
+.print-meta { font-size: 0.72rem; color: #555; font-family: -apple-system, sans-serif; font-variant-numeric: tabular-nums; }
+.print-head h1 { font-size: 1.35rem; margin-bottom: 16px; font-family: -apple-system, sans-serif; font-weight: 800; }
+.print-fields { display: flex; justify-content: space-between; gap: 16px; font-size: 0.88rem; color: #222; font-family: -apple-system, sans-serif; flex-wrap: wrap; }
+.print-field-name { flex: 1 1 auto; }
+.print-section { margin-bottom: 22px; break-inside: avoid; }
+.print-section-head { font-weight: 700; border-bottom: 1px solid #999; padding-bottom: 5px; margin-bottom: 14px; font-size: 0.95rem; font-family: -apple-system, sans-serif; color: #333; }
+.print-question { margin-bottom: 18px; break-inside: avoid; }
+.print-q-row { display: flex; gap: 8px; font-size: 1rem; line-height: 1.45; }
+.print-q-row .q-num { font-weight: 700; flex: none; }
+.print-answer-line {
+  margin-top: 10px; margin-left: 26px; border-bottom: 1px solid #999;
+  min-height: 26px; position: relative;
+}
+.print-unit {
+  position: absolute; right: 0; bottom: 2px; font-size: 0.72rem; color: #999;
+  font-family: -apple-system, sans-serif; font-style: italic;
+}
 
 @media print {
+  @page { margin: 14mm 16mm; }
   body.print-mode #intro,
   body.print-mode #testScreen,
   body.print-mode #resultScreen,
   body.print-mode .brand { display: none !important; }
-  body.print-mode #printRoot { display: block; }
+  body.print-mode #printRoot { display: block; padding: 0; max-width: none; }
   body.print-mode { background: #fff; color: #111; }
   body:not(.print-mode) #printRoot { display: none !important; }
 }

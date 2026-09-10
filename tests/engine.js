@@ -165,11 +165,15 @@
     function renderPrintSheet() {
       printRoot.innerHTML = '';
       printRoot.appendChild(el('div', { class: 'print-head' }, [
-        el('div', { class: 'print-brand' }, [document.createTextNode('Образовательный центр «Ньютон»')]),
+        el('div', { class: 'print-brand-row' }, [
+          el('span', { class: 'print-brand' }, [document.createTextNode('Образовательный центр «Ньютон»')]),
+          el('span', { class: 'print-meta' }, [document.createTextNode(TEST.duration_min + ' мин · ' + TEST.total_questions + ' заданий · ' + TEST.max_score + ' баллов max')])
+        ]),
         el('h1', {}, [document.createTextNode(TEST.title + ' — ' + TEST.grade)]),
         el('div', { class: 'print-fields' }, [
-          el('span', {}, [document.createTextNode('ФИО ученика: _______________________________________')]),
-          el('span', {}, [document.createTextNode('Дата: __________')])
+          el('span', { class: 'print-field-name' }, [document.createTextNode('ФИО ученика: _______________________________________')]),
+          el('span', {}, [document.createTextNode('Дата: ___________')]),
+          el('span', {}, [document.createTextNode('Оценка: _____ из ' + TEST.max_score)])
         ])
       ]));
       TEST.sections.forEach(section => {
@@ -178,27 +182,37 @@
         ]);
         section.questions.forEach(q => {
           secEl.appendChild(el('div', { class: 'print-question' }, [
-            el('span', { class: 'q-num' }, [document.createTextNode(q.num + '.')]),
-            el('span', {}, [document.createTextNode(q.text)]),
-            el('span', { class: 'print-line' }, [document.createTextNode('Ответ (' + q.unit + '): _______________')])
+            el('div', { class: 'print-q-row' }, [
+              el('span', { class: 'q-num' }, [document.createTextNode(q.num + '.')]),
+              el('span', {}, [document.createTextNode(q.text)])
+            ]),
+            el('div', { class: 'print-answer-line' }, [
+              el('span', { class: 'print-unit' }, [document.createTextNode(q.unit)])
+            ])
           ]));
         });
         printRoot.appendChild(secEl);
       });
     }
 
-    printBtn.addEventListener('click', () => {
+    function doPrint() {
       renderPrintSheet();
       document.body.classList.add('print-mode');
       window.print();
       setTimeout(() => document.body.classList.remove('print-mode'), 500);
-    });
+    }
+
+    printBtn.addEventListener('click', doPrint);
 
     finishBtn.addEventListener('click', finishTest);
 
     renderQuestions();
     updateAnsweredCount();
     checkFormValid();
+
+    if (new URLSearchParams(location.search).get('print') === '1') {
+      setTimeout(doPrint, 300);
+    }
   }
 
   window.NewtonTestEngine = { init: initTest };
