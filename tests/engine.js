@@ -5,11 +5,16 @@
 
   window.__NEWTON_SUBMIT__ = function (data) {
     try {
-      const wrong = data.breakdown.filter(b => !b.ok).map(b => '✗ ' + b.text);
+      const fmtCorrect = c => Array.isArray(c) ? c.join(' / ') : c;
+      const wrong = data.breakdown.filter(b => !b.ok).map(b =>
+        '✗ ' + b.text +
+        '\n   Ответ ученика: ' + (b.userVal || '(пусто)') +
+        ' — правильный: ' + fmtCorrect(b.correct)
+      );
       const description =
         'Вступительный тест — ' + data.grade + '\n' +
         'Результат: ' + data.score + ' из ' + data.maxScore + ' (' + data.percent + '%)\n\n' +
-        (wrong.length ? 'Ошибки в темах:\n' + wrong.join('\n') : 'Все ответы верны!');
+        (wrong.length ? 'Разбор ошибок:\n' + wrong.join('\n\n') : 'Все ответы верны!');
 
       const body = new URLSearchParams({
         fullName: data.name,
