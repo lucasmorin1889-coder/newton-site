@@ -458,6 +458,7 @@ a.pbtn{text-decoration:none;display:block}
 .popup-box input:focus{border-color:var(--a)}
 .popup-fine{font-size:.75rem;color:var(--t3);margin-top:.75rem;text-align:center;max-width:none}
 .popup-done{display:none;text-align:center;padding:1rem 0}
+#cform-done{display:none;text-align:center;padding:3rem 1.5rem;background:var(--s);border:1px solid var(--bdr);border-radius:16px}
 .popup-done .pd-icon{font-size:2.5rem;color:var(--a);margin-bottom:.5rem}
 .popup-done h4{font-size:1.1rem;font-weight:700;margin-bottom:.4rem}
 .popup-done p{font-size:.88rem;color:var(--t2);max-width:none}
@@ -906,7 +907,8 @@ footer{background:var(--hbg);color:rgba(190,225,208,.5);padding:2.25rem 0;font-s
     <p class="lbl rv">Запись</p>
     <h2 class="rv" style="margin-top:.4rem">Свяжитесь с нами</h2>
     <div class="cg">
-      <form class="cform" onsubmit="submitContact(event)">
+      <div id="cform-wrap">
+      <form class="cform" id="cform" onsubmit="submitContact(event)">
         <div class="cf"><label>Имя родителя</label><input type="text" name="parentName" placeholder="Ваше имя" required></div>
         <div class="cf"><label>Телефон</label><input type="tel" name="phone" placeholder="+79" required></div>
         <div class="cf"><label>Предмет и класс</label><input type="text" name="subjectGrade" placeholder="Например: математика, 10 класс"></div>
@@ -914,8 +916,13 @@ footer{background:var(--hbg);color:rgba(190,225,208,.5);padding:2.25rem 0;font-s
         <div class="cf"><label>Комментарий (необязательно)</label><textarea name="comment" placeholder="Расскажите о ситуации или задайте вопрос"></textarea></div>
         <div class="ccrow"><input type="checkbox" id="ccon" required><label for="ccon" style="cursor:pointer">Даю согласие на обработку персональных данных согласно ФЗ №152-ФЗ «О персональных данных»</label></div>
         <button type="submit" class="btn btn-g" style="width:fit-content">Отправить заявку</button>
-        <p class="ok-msg" id="cmsg">Заявка отправлена! Свяжемся в течение рабочего дня.</p>
       </form>
+      <div class="popup-done" id="cform-done">
+        <div class="pd-icon">✓</div>
+        <h4>Спасибо за вашу заявку!</h4>
+        <p>Администратор свяжется с вами в течение рабочего дня.</p>
+      </div>
+      </div>
       <div class="locs">
         <div class="loc rv"><span class="loc-tag">Центр в Варкаусе</span><h3>ул. Варкауса, 35</h3><p>Утренние и дневные группы, дошкольники.</p><p style="margin-top:.4rem">Пн–Пт: 9:00 – 18:00</p></div>
         <div class="loc rv"><span class="loc-tag">Центр в Древлянке</span><h3>Бульвар Интернационалистов, 8</h3><p>Утренние занятия для учеников второй смены.</p><p style="margin-top:.4rem">Пн–Пт: 8:00 – 14:00</p></div>
@@ -960,8 +967,8 @@ footer{background:var(--hbg);color:rgba(190,225,208,.5);padding:2.25rem 0;font-s
     </div>
     <div class="popup-done" id="popup-done">
       <div class="pd-icon">✓</div>
-      <h4>Отправили!</h4>
-      <p>Проверьте WhatsApp — гид уже там. Если хотите — приходите на бесплатный тест: <a href="/tests/" target="_blank" rel="noopener" onclick="closePopup()">пройти тест →</a></p>
+      <h4>Спасибо за заявку!</h4>
+      <p>Администратор свяжется с вами и отправит гид на WhatsApp. А пока можно пройти бесплатный тест: <a href="/tests/" target="_blank" rel="noopener" onclick="closePopup()">пройти тест →</a></p>
     </div>
   </div>
 </div>
@@ -1127,7 +1134,8 @@ function submitContact(e){
     description:'Форма «Свяжитесь с нами»'+(f.callTime.value.trim()?'\nУдобное время для звонка: '+f.callTime.value.trim():'')+(f.comment.value.trim()?'\nКомментарий: '+f.comment.value.trim():''),
     utm_medium:'contact-form'
   });
-  const m=document.getElementById('cmsg');m.style.display='block';e.target.querySelector('[type="submit"]').disabled=true;
+  document.getElementById('cform').style.display='none';
+  document.getElementById('cform-done').style.display='block';
 }
 
 /* ===== CONFETTI ===== */
