@@ -907,11 +907,11 @@ footer{background:var(--hbg);color:rgba(190,225,208,.5);padding:2.25rem 0;font-s
     <h2 class="rv" style="margin-top:.4rem">Свяжитесь с нами</h2>
     <div class="cg">
       <form class="cform" onsubmit="submitContact(event)">
-        <div class="cf"><label>Имя родителя</label><input type="text" placeholder="Ваше имя" required></div>
-        <div class="cf"><label>Телефон</label><input type="tel" placeholder="+79" required></div>
-        <div class="cf"><label>Предмет и класс</label><input type="text" placeholder="Например: математика, 10 класс"></div>
-        <div class="cf"><label>Удобное время для звонка</label><input type="text" placeholder="Например: будни после 18:00"></div>
-        <div class="cf"><label>Комментарий (необязательно)</label><textarea placeholder="Расскажите о ситуации или задайте вопрос"></textarea></div>
+        <div class="cf"><label>Имя родителя</label><input type="text" name="parentName" placeholder="Ваше имя" required></div>
+        <div class="cf"><label>Телефон</label><input type="tel" name="phone" placeholder="+79" required></div>
+        <div class="cf"><label>Предмет и класс</label><input type="text" name="subjectGrade" placeholder="Например: математика, 10 класс"></div>
+        <div class="cf"><label>Удобное время для звонка</label><input type="text" name="callTime" placeholder="Например: будни после 18:00"></div>
+        <div class="cf"><label>Комментарий (необязательно)</label><textarea name="comment" placeholder="Расскажите о ситуации или задайте вопрос"></textarea></div>
         <div class="ccrow"><input type="checkbox" id="ccon" required><label for="ccon" style="cursor:pointer">Даю согласие на обработку персональных данных согласно ФЗ №152-ФЗ «О персональных данных»</label></div>
         <button type="submit" class="btn btn-g" style="width:fit-content">Отправить заявку</button>
         <p class="ok-msg" id="cmsg">Заявка отправлена! Свяжемся в течение рабочего дня.</p>
@@ -1109,7 +1109,26 @@ function selectSubject(s){
   });
   showStep(1.5);
 }
-function submitContact(e){e.preventDefault();const m=document.getElementById('cmsg');m.style.display='block';e.target.querySelector('[type="submit"]').disabled=true;}
+/* ===== HOLLIHOP CRM ===== */
+function sendToHollihop(params){
+  try{
+    const body=new URLSearchParams(Object.assign({utm_source:'newton-site'},params));
+    fetch('https://newton.t8s.ru/Api/V2/AddStudyRequest',{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()}).catch(()=>{});
+  }catch(e){}
+}
+
+function submitContact(e){
+  e.preventDefault();
+  const f=e.target;
+  sendToHollihop({
+    fullName:f.parentName.value.trim(),
+    phone:f.phone.value.trim(),
+    discipline:f.subjectGrade.value.trim(),
+    description:'Форма «Свяжитесь с нами»'+(f.callTime.value.trim()?'\nУдобное время для звонка: '+f.callTime.value.trim():'')+(f.comment.value.trim()?'\nКомментарий: '+f.comment.value.trim():''),
+    utm_medium:'contact-form'
+  });
+  const m=document.getElementById('cmsg');m.style.display='block';e.target.querySelector('[type="submit"]').disabled=true;
+}
 
 /* ===== CONFETTI ===== */
 function launchConfetti(){
@@ -1125,7 +1144,15 @@ function launchConfetti(){
 /* ===== POPUP ===== */
 function openPopup(){document.getElementById('popup').classList.add('show');}
 function closePopup(){document.getElementById('popup').classList.remove('show');}
-function submitPopup(e){e.preventDefault();document.getElementById('popup-form-wrap').style.display='none';document.getElementById('popup-done').style.display='block';}
+function submitPopup(e){
+  e.preventDefault();
+  sendToHollihop({
+    phone:document.getElementById('popup-phone').value.trim(),
+    description:'Заявка на бесплатный гид «5 ошибок при подготовке к ЕГЭ»',
+    utm_medium:'lead-magnet-popup'
+  });
+  document.getElementById('popup-form-wrap').style.display='none';document.getElementById('popup-done').style.display='block';
+}
 document.getElementById('popup').addEventListener('click',e=>{if(e.target===e.currentTarget)closePopup();});
 // Show popup once after 20s
 if(!localStorage.getItem('popup-shown')&&!window.matchMedia('(max-width:640px)').matches){
