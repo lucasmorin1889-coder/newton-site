@@ -1,6 +1,35 @@
 (function () {
   'use strict';
 
+  const HOLLIHOP_URL = 'https://newton.t8s.ru/Api/V2/AddStudyRequest';
+
+  window.__NEWTON_SUBMIT__ = function (data) {
+    try {
+      const wrong = data.breakdown.filter(b => !b.ok).map(b => '✗ ' + b.text);
+      const description =
+        'Вступительный тест — ' + data.grade + '\n' +
+        'Результат: ' + data.score + ' из ' + data.maxScore + ' (' + data.percent + '%)\n\n' +
+        (wrong.length ? 'Ошибки в темах:\n' + wrong.join('\n') : 'Все ответы верны!');
+
+      const body = new URLSearchParams({
+        fullName: data.name,
+        phone: data.phone,
+        discipline: data.subject,
+        description: description,
+        utm_source: 'newton-site',
+        utm_medium: 'test',
+        utm_campaign: data.test_id
+      });
+
+      fetch(HOLLIHOP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString()
+      }).catch(() => {});
+    } catch (e) { /* never block the result screen on a CRM send failure */ }
+  };
+
   function normalize(val) {
     if (typeof val === 'number') return val;
     return String(val).trim().toLowerCase().replace(/\s+/g, '').replace(',', '.');
